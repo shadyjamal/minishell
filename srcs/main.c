@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/14 19:27:34 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/15 11:26:49 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 void dispatcher(char **cmd, t_list *env)
 {
-    if (ft_strequ(cmd[0], "cd"))
-        ft_cd(char **cmd, t_list *env);
-    else if (ft_strequ(cmd[0], "echo"))
-        ft_echo(char **cmd, t_list *env);
-    else if (ft_strequ(cmd[0], "echo"))
-        ft_env(char **cmd, t_list *env);
-    else if (ft_strequ(cmd[0], "echo"))
-        ft_setenv(char **cmd, t_list *env);
-    else if (ft_strequ(cmd[0], "echo"))
-        ft_unsetenv(char **cmd, t_list *env);
-    else if (ft_strequ(cmd[0], "exit"))
-        ft_exit();
+    // if (ft_strequ(cmd[0], "cd"))
+    //     ft_cd(cmd, env);
+    // else if (ft_strequ(cmd[0], "echo"))
+    //     ft_echo(cmd, env);
+    if (ft_strequ(cmd[0], "env"))
+         ft_env(env);
+    else if (ft_strequ(cmd[0], "setenv"))
+         ft_setenv(cmd, env);
+    // else if (ft_strequ(cmd[0], "unsetenv"))
+    //     ft_unsetenv(cmd, env);
+    // else if (ft_strequ(cmd[0], "exit"))
+    //     ft_exit();
     else
-        ft_shellmain(char **cmd, t_list *env);
+        ft_shellmain(cmd, env);
 }
 
 int main(int ac, char *av[], char *environ[])

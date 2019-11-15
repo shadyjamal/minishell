@@ -6,3 +6,12 @@ void    printmatrix(char **tab)
     while (tab[++i])
         printf("%s\n", tab[i]);
 }
+
+void printlist(t_list *env)
+{
+    while (env)
+    {
+        printf("%s\n", env->content);
+        env = env->next;
+    }
+}
