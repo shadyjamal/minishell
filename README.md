@@ -1,6 +1,6 @@
 # minishell
 
-This project is an implementation of a minishell in C language 
+This project is an implementation of a minishell in C language.
 
 ## Instructions
 You must program a mini UNIX command interpreter.
