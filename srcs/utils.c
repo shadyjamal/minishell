@@ -1,29 +1,37 @@
 #include "minishell.h"
 
-void	ft_lstdelone_if(t_list **list, void *data, int data_size, int (*cmp)())
+t_list **ft_lstfind(t_list **lst,const char *needle, size_t size)
 {
-	t_list	*cur;
-	t_list	*tmp;
-	
-	if (*list && cmp((*list)->content, data, data_size))
-	{
-		cur = *list;
-		*list = (*list)->next;
-		free(cur);
-        return ;
-	}
-	cur = *list;
-	while (cur && cur->next)
-	{
-		if (cmp(cur->next->content, data) == 1)
-		{
-			tmp = cur->next;
-			cur->next = tmp->next;
-			free(tmp);
-            break ;
-		}
-		cur = cur->next;
-	}
+    t_list **ptr;
+
+    ptr = lst;
+    if(!needle)
+        return(NULL);
+    while(*ptr)
+    {
+        if((*ptr)->content_size >= size && !memcmp((*ptr)->content, needle, size))
+            return(ptr);
+        ptr = &(*ptr)->next;
+    }
+    return (NULL);
+}
+
+void ft_lstonedel(t_list **to_del)
+{
+    t_list *tmp;
+    
+    tmp = *to_del;
+    *to_del = tmp->next;
+    free(tmp->content);
+    free(tmp);
+}
+
+void    ft_lstmodifone(t_list **to_mod, char *value)
+{
+    free((*to_mod)->content);
+    (*to_mod)->content = NULL;
+    (*to_mod)->content = value;
+	(*to_mod)->content_size = ft_strlen(value);
 }
 
 int		ft_strisalnum(char *str)

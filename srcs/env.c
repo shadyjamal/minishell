@@ -6,19 +6,26 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/15 11:27:25 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/15 18:10:26 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_env(t_list *env) // chack commande env
+void    ft_env(t_list **env) // chack commande env
 {
-    while (env)
+    t_list *cur;
+    int i = 0;
+
+    cur = *env;
+    ft_putendl("TEST");
+    while (cur)
     {
-        ft_putendl(env->content);
-        env = env->next;
+        i++;
+        ft_putendl(cur->content);
+        cur = cur->next;
     }
+    ft_putnbr(i);
 }
 
 t_list *env_to_list(char **env)
@@ -56,22 +63,44 @@ char **list_to_env(t_list *env)
     return (tab_env);
 }
 
-int ft_setenv(char **cmd, t_list *env)
+int ft_setenv(char **cmd, t_list **env)
 {
     int len;
+    char *needle;
     char *newenv;
+    t_list **to_modify;
 
     len = 0;
+    if (cmd[3])
+        return (0); //Error setenv: Too many arguments.
     if (!ft_strisalnum(cmd[1]))
         return (0); //Error setenv: Variable name must contain alphanumeric characters.
-    len = ft_strlen(cmd[1]);
-    ft_lstdelone_if(&env, cmd[1], len, &ft_strnequ);
-    newenv = ft_strjoin(cmd[1], cmd[2]); // strjoin tableau; newenv = "cmd[1]=cmd[2]""
-    ft_lstpushback(&env, newenv, ft_strlen(newenv));
+    needle = ft_strjoin(cmd[1], "=");
+    if ((to_modify = ft_lstfind(env, needle, ft_strlen(needle)))) 
+        ft_lstmodifone(to_modify, ft_strjoin(needle, cmd[2]));
+    else
+    {
+        newenv = ft_strjoin(needle, cmd[2]);
+        ft_lstpushback(env, newenv, ft_strlen(newenv) + 1);
+    }
+    free(needle);
     return (1);
 }
 
-// void ft_unsetenv(char **cmd, t_list *env)
-// {
+int ft_unsetenv(char **cmd, t_list **env)
+{
+    int i;
+    t_list **to_del;
+    char *needle;
 
-// }
+    i = 1;
+    while (cmd[i])
+    {
+        needle = ft_strjoin(cmd[i],"=");
+        if ((to_del = ft_lstfind(env, needle, ft_strlen(needle))))
+            ft_lstonedel(to_del);
+        free(needle);
+        i++;
+    }
+    return (1);
+}

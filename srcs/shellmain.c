@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/15 11:28:18 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/15 16:06:30 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char *find(char *cmd, char **env)
     char **paths = ft_strsplit(env[6] + 5, ':');
     while (paths[i])
     {
-        if (!access(path = ft_strjoin(paths[i], cmd), F_OK))
+        if (!access(path = ft_strjoin(paths[i], cmd), F_OK)) // strjoin tableau;
         {
             if (!access(path, X_OK))
                 return (path);
