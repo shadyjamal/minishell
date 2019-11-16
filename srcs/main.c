@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/15 17:54:11 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/16 17:12:44 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void dispatcher(char **cmd, t_list **env)
 {
-    // if (ft_strequ(cmd[0], "cd"))
-    //     ft_cd(cmd, env);
-    // else if (ft_strequ(cmd[0], "echo"))
-    //     ft_echo(cmd, env);
-    if (ft_strequ(cmd[0], "env"))
+    if (ft_strequ(cmd[0], "cd"))
+         ft_cd(cmd, env);
+    else if (ft_strequ(cmd[0], "echo"))
+         ft_echo(cmd);
+    else if (ft_strequ(cmd[0], "env"))
          ft_env(env);
     else if (ft_strequ(cmd[0], "setenv"))
          ft_setenv(cmd, env);

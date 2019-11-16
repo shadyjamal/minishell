@@ -18,7 +18,9 @@ t_list *env_to_list(char **env);
 char **list_to_env(t_list *env);
 
 // bultins
+void    ft_echo(char **cmd);
 void    ft_env(t_list **env);
+int    ft_cd(char **cmd, t_list **env);
 int ft_setenv(char **cmd, t_list **env);
 int ft_unsetenv(char **cmd, t_list **env);
 

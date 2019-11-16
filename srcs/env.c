@@ -6,26 +6,22 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/15 18:10:26 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/16 16:59:31 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_env(t_list **env) // chack commande env
+void    ft_env(t_list **env)
 {
     t_list *cur;
-    int i = 0;
 
     cur = *env;
-    ft_putendl("TEST");
     while (cur)
     {
-        i++;
         ft_putendl(cur->content);
         cur = cur->next;
     }
-    ft_putnbr(i);
 }
 
 t_list *env_to_list(char **env)

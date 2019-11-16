@@ -1,29 +1,16 @@
 #include "minishell.h"
 
-t_list **ft_lstfind(t_list **lst,const char *needle, size_t size)
-{
-    t_list **ptr;
-
-    ptr = lst;
-    if(!needle)
-        return(NULL);
-    while(*ptr)
-    {
-        if((*ptr)->content_size >= size && !memcmp((*ptr)->content, needle, size))
-            return(ptr);
-        ptr = &(*ptr)->next;
-    }
-    return (NULL);
-}
-
 void ft_lstonedel(t_list **to_del)
 {
     t_list *tmp;
-    
-    tmp = *to_del;
-    *to_del = tmp->next;
-    free(tmp->content);
-    free(tmp);
+
+    if (to_del && *to_del)
+    {
+        tmp = *to_del;
+        *to_del = tmp->next;
+        free(tmp->content);
+        free(tmp);
+    }
 }
 
 void    ft_lstmodifone(t_list **to_mod, char *value)
