@@ -6,15 +6,15 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/17 16:58:30 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/17 20:41:38 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// PARSE
-// if \t\t\t\t\t\n\n\n\n ls => ls
-// if \t\t ls \t\t -a\t\t -l\n\n => ls -a -l
+// 
+// PARSE $ ~
+// 
 // 
 
 void dispatcher(char **cmd, t_list **env)

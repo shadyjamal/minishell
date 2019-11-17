@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/17 15:30:55 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/17 20:41:38 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char *find(char *cmd, t_list **env)
             i++;
         }
     }
-    free(paths); //fee(paths[i])
+    free(paths); //free(paths[i])
     permdeny ? ft_putendl("permission denied") : ft_putendl("Command not found.");
     return (NULL);
 }
