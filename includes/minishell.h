@@ -8,7 +8,8 @@
 
              
 extern char **environ;
-
+//parse
+char    **ft_strparse(char const *s, char c);
 //debug
 void    printmatrix(char **tab);
 void printlist(t_list *env);

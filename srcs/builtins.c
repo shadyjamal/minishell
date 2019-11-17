@@ -13,7 +13,7 @@ void    ft_echo(char **cmd)
     write(1, "\n",1);
 }
 
-int    test_access(char *path)
+int    cd_access(char *path)
 {
     if (!access(path, F_OK))
     {
@@ -41,38 +41,17 @@ void    ft_update_env(t_list **env, char *pwd, char *oldpwd)
         ft_lstmodifone(tofind, ft_strjoin("PWD=", pwd));
 }
 
-char     *ft_cdmoins(t_list **env)
+void     ft_cdenv(t_list **env, char *pwd)
 {
     t_list **tofind;
-    char *path;
+    int len;
 
-    if ((tofind = ft_lstfind(env, "OLDPWD=", 7)))
+    len = ft_strlen(pwd);
+    if ((tofind = ft_lstfind(env, pwd, len)))
     {
-        path = (*tofind)->content + 7;
-        if (test_access(path))
-        {
-            chdir(path);
-            return (path);
-        }
+        if (cd_access((*tofind)->content + len))
+            chdir((*tofind)->content + len);
     }
-    return (NULL);
-}
-
-char     *ft_cdhome(t_list **env)
-{
-    t_list **tofind;
-    char *path;
-
-    if ((tofind = ft_lstfind(env, "HOME=", 5)))
-    {
-        path = (*tofind)->content + 5;
-        if (test_access(path))
-        {
-            chdir(path);
-            return (path);
-        }
-    }
-    return (NULL);
 }
 
 int    ft_cd(char **cmd, t_list **env)
@@ -85,25 +64,21 @@ int    ft_cd(char **cmd, t_list **env)
     if (cmd[1] && cmd[2])
         return (0); //Error cd: Too many arguments. print_error(path, ERRARGS)
     oldpath = getcwd(NULL, 0);
-    if (ft_strequ(cmd[1], "-"))
-        newpath = ft_cdmoins(env);
+    if (!cmd[1])
+        ft_cdenv(env, "HOME=");
+    else if (ft_strequ(cmd[1], "-"))
+        ft_cdenv(env, "OLDPWD=");
     else if (cmd[1][0] != '/')
     {
-        if (!cmd[1])
-            newpath = ft_cdhome(env);
-        else
-        {
-            newpath = ft_strjoin(oldpath, "/"); // leak
-            newpath = ft_strjoin(newpath, cmd[1]);
-            if (test_access(newpath))
-                chdir(newpath);
-        }
+        newpath = ft_strjoin(oldpath, "/"); // leak
+        newpath = ft_strjoin(newpath, cmd[1]);
+        if (cd_access(newpath))
+            chdir(newpath);
     }
-    else if (test_access(cmd[1]))
-    {
-        newpath = cmd[1];
-        chdir(newpath);
-    }
-    ft_update_env(env, newpath, oldpath); 
+    else if (cd_access(cmd[1]))
+        chdir(cmd[1]);
+    ft_update_env(env, getcwd(NULL, 0), oldpath);
+    //free(oldpath);
+    //free(newpath);
     return (1);
 }    

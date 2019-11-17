@@ -6,15 +6,22 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/16 17:12:44 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/17 16:58:30 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// PARSE
+// if \t\t\t\t\t\n\n\n\n ls => ls
+// if \t\t ls \t\t -a\t\t -l\n\n => ls -a -l
+// 
+
 void dispatcher(char **cmd, t_list **env)
 {
-    if (ft_strequ(cmd[0], "cd"))
+    if (!cmd[0])
+         return ;
+    else if (ft_strequ(cmd[0], "cd"))
          ft_cd(cmd, env);
     else if (ft_strequ(cmd[0], "echo"))
          ft_echo(cmd);
@@ -42,9 +49,9 @@ int main(int ac, char *av[], char *environ[])
     while (1)
     {
         write(1, "\033[95mសួស្តី​ពិភពលោក\033[0m$>", 53);
-        if (get_next_line(0, &buffer) >= 0)
+        if (get_next_line(0, &buffer) > 0)
         {
-            cmd = ft_strsplit(buffer, ' ');
+            cmd = ft_strparse(buffer, ' ');
             dispatcher(cmd, &env);
         }
     }
