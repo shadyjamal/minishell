@@ -13,31 +13,31 @@ void ft_echo(char **cmd)
 	write(1, "\n", 1);
 }
 
-void parse_path(char *full_path, char *path)
-{
-	char *tmp;
-	int diff;
-	while (*path)
-	{
-		if ((tmp = ft_strchr(path, '/')) || (tmp = ft_strchr(path, '\0')))
-		{
-			if ((diff =  (tmp - path) == 2 && ft_strnequ(*path, "..", 2)))
-			{
-				if (*full_path && (tmp = ft_strrchr(full_path, '/')))
-				{
-					*tmp = 0;
-					path += 3;
-				}
-			}
-			else
-			{
-				ft_strcat(full_path,"/");
-				ft_strncat(full_path, path, diff);
-				path += diff + 1;
-			}	
-		}
-	}
-}
+// void parse_path(char *full_path, char *path)
+// {
+// 	char *tmp;
+// 	int diff;
+// 	while (*path)
+// 	{
+// 		if ((tmp = ft_strchr(path, '/')) || (tmp = ft_strchr(path, '\0')))
+// 		{
+// 			if ((diff =  (tmp - path) == 2 && ft_strnequ(*path, "..", 2)))
+// 			{
+// 				if (*full_path && (tmp = ft_strrchr(full_path, '/')))
+// 				{
+// 					*tmp = 0;
+// 					path += 3;
+// 				}
+// 			}
+// 			else
+// 			{
+// 				ft_strcat(full_path,"/");
+// 				ft_strncat(full_path, path, diff);
+// 				path += diff + 1;
+// 			}	
+// 		}
+// 	}
+// }
 
 int cd_access(char *path)
 {
@@ -82,30 +82,28 @@ void ft_cdenv(t_list **env, char *pwd)
 
 int ft_cd(char **cmd, t_list **env)
 {
-	char *oldpath;
-	char *newpath;
+	int dir_changed;
 
-	oldpath = NULL;
-	newpath = NULL;
+	dir_changed = 1;
 	if (cmd[1] && cmd[2])
 		return (0); //Error cd: Too many arguments. print_error(path, ERRARGS)
-	oldpath = getcwd(NULL, 0);
 	if (!cmd[1])
-		ft_cdenv(env, "HOME=");
+		dir_changed = chdir(home);
 	else if (ft_strequ(cmd[1], "-"))
-		ft_cdenv(env, "OLDPWD=");
-	else if (cmd[1][0] != '/')
-	{
-		newpath = ft_strjoin(oldpath, "/"); // leak
-		newpath = ft_strjoin(newpath, cmd[1]);
-		if (cd_access(newpath))
-			chdir(newpath);
-	}
+		dir_changed = chdir(oldpwd);
 	else if (cd_access(cmd[1]))
-		chdir(cmd[1]);
-	if ()
-		ft_update_env(env, newpath, oldpath);
+		dir_changed = chdir(cmd[1]);
+	if (dir_changed == 0 && cmd[1])
+		if(ft_strequ(cmd[1],"-"))
+			ft_update_env(env, oldpwd, pwd);
+		if(is_link(cmd[1]))
+			ft_update_env(env, ft_pwd(), pwd);
+		else
+			ft_update_env(env, getcwd(NULL,0), pwd);
+	}
 	//free(oldpath);
 	//free(newpath);
 	return (1);
 }
+
+//OLDPATH env variable makaytmhach wakha dir lih unset env o ila 3awadti creyitih makayb9ach ytmodifa
