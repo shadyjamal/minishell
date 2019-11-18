@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstpushback.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 19:05:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/11 19:06:00 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/18 16:31:27 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ void	ft_lstpushback(t_list **blst, void const *content,
 		size_t content_size)
 {
 	t_list	*list;
-
+	if (!blst || !content_size)
+		return ;
 	list = *blst;
-	if (blst && list)
+	if (list)
 	{
 		while (list && list->next)
 			list = list->next;

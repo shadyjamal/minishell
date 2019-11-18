@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 09:09:33 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/06 14:59:08 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/18 13:14:15 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,9 @@ int					ft_isblank(int c);
 int					get_next_line(const int fd, char **line);
 void				ft_lstpushback(t_list **blst, void const *content,
 		size_t content_size);
+int					ft_isinstr(char c, const char *s);
+char				*ft_skip_unitl_char(char *str, const char *compare);
+char				*ft_skip_chars(char *str, const char *compare);
+
+
 #endif

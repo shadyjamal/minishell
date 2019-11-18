@@ -80,30 +80,29 @@ void ft_cdenv(t_list **env, char *pwd)
 	}
 }
 
-int ft_cd(char **cmd, t_list **env)
-{
-	int dir_changed;
+// int ft_cd(char **cmd, t_list **env)
+// {
+// 	int dir_changed;
 
-	dir_changed = 1;
-	if (cmd[1] && cmd[2])
-		return (0); //Error cd: Too many arguments. print_error(path, ERRARGS)
-	if (!cmd[1])
-		dir_changed = chdir(home);
-	else if (ft_strequ(cmd[1], "-"))
-		dir_changed = chdir(oldpwd);
-	else if (cd_access(cmd[1]))
-		dir_changed = chdir(cmd[1]);
-	if (dir_changed == 0 && cmd[1])
-		if(ft_strequ(cmd[1],"-"))
-			ft_update_env(env, oldpwd, pwd);
-		if(is_link(cmd[1]))
-			ft_update_env(env, ft_pwd(), pwd);
-		else
-			ft_update_env(env, getcwd(NULL,0), pwd);
-	}
-	//free(oldpath);
-	//free(newpath);
-	return (1);
-}
+// 	dir_changed = 1;
+// 	if (cmd[1] && cmd[2])
+// 		return (0); //Error cd: Too many arguments. print_error(path, ERRARGS)
+// 	if (!cmd[1])
+// 		dir_changed = chdir(home);
+// 	else if (ft_strequ(cmd[1], "-"))
+// 		dir_changed = chdir(oldpwd);
+// 	else if (cd_access(cmd[1]))
+// 		dir_changed = chdir(cmd[1]);
+// 	if (dir_changed == 0 && cmd[1])
+// 		if(ft_strequ(cmd[1],"-"))
+// 			ft_update_env(env, oldpwd, pwd);
+// 		if(is_link(cmd[1]))
+// 			ft_update_env(env, ft_pwd(), pwd);
+// 		else
+// 			ft_update_env(env, getcwd(NULL,0), pwd);
+// 	}
+
+// 	return (1);
+// }
 
 //OLDPATH env variable makaytmhach wakha dir lih unset env o ila 3awadti creyitih makayb9ach ytmodifa

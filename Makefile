@@ -16,11 +16,11 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C libft/
-	@$(CC) $(FLAGS) $(INC) $(OBJ) -L$(DIR_LFT) -lft -o $(NAME)
+	@$(CC) -g $(INC) $(OBJ) -L$(DIR_LFT) -lft -o $(NAME)
 
 srcs/%.o: srcs/%.c
 	@echo "$^->$@"
-	@$(CC) $(FLAGS) $(INC) -c $< -o $@
+	@$(CC) -g $(INC) -c $< -o $@
 
 clean:
 	@(echo "Delete .o of $(NAME) and Libft")
