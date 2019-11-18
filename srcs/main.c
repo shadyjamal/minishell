@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/17 20:41:38 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/18 12:15:42 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@ void dispatcher(char **cmd, t_list **env)
     //     ft_exit();
     else
         ft_shellmain(cmd, *env);
+}
+
+t_list *ft_parsecmd(char *buffer)
+{
+     char tmp;
+
+     while (*buffer)
+     {
+          tmp = ft_skip_unitl_char()
+     }
 }
 
 int main(int ac, char *av[], char *environ[])
