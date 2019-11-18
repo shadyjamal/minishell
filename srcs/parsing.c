@@ -1,79 +1,58 @@
 #include "minishell.h"
 
-static size_t	ft_countwords(char const *s, char c)
+char *ft_parse_quote(t_list **args, char *buffer, char c)
 {
-	size_t words;
+     int k;
+     int j;
+     char buff[200];
 
-	words = 0;
-	while (*s)
-	{
-		while (*s == c || *s == '\t')
-			s++;
-		if (*s)
-		{
-			words++;
-			while (*s && *s != c && *s != '\t')
-				s++;
-		}
-	}
-	return (words);
+     k = 0;
+     j = 0;
+     while (*buffer)
+     {
+          if (k == 0 && (*buffer == '\t' || *buffer == ' '))
+               break;
+          else if (*buffer == c)
+               k = (k + 1) % 2;
+          else
+               buff[j++] = *buffer;
+          buffer++;
+     }
+     buff[j++] = 0;
+     if (!k)
+          ft_lstpushback(args, buff, j);
+     else
+     {
+          ft_putendl("unmatched c");
+          return (NULL);
+     }
+     return (buffer);
 }
 
-static char		*ft_getword(char *word, char c)
+t_list *ft_parsecmd(char *buffer)
 {
-	char *start;
+     char c;
+     char *tmp;
+     int i;
+     t_list *args;
 
-	start = word;
-	while (*word && *word != c && *word != '\t')
-		word++;
-	*word = '\0';
-	return (ft_strdup(start));
-}
-
-static void		ft_freewords(char **words, size_t i)
-{
-	while (i--)
-		ft_strdel(&(words[i]));
-	free(*words);
-}
-
-static char		**ft_getwords(char *s, char c, size_t words_count)
-{
-	char	**words;
-	char	*word;
-	size_t	i;
-
-	i = 0;
-	if ((words = (char **)ft_memalloc(sizeof(char *) * (words_count + 1))))
-	{
-		while (i < words_count)
-		{
-			while (*s == c || *s == '\t')
-				s++;
-			if (*s)
-			{
-				if (!(word = ft_getword(s, c)))
-				{
-					ft_freewords(words, i);
-					return (NULL);
-				}
-				words[i++] = word;
-				s += (ft_strlen(word) + 1);
-			}
-		}
-		words[i] = NULL;
-	}
-	return (words);
-}
-
-char			**ft_strparse(char const *s, char c)
-{
-	char	**words;
-	char	*line;
-
-	if (!s || !(line = ft_strdup((char *)s)))
-		return (NULL);
-	words = ft_getwords(line, c, ft_countwords(line, c));
-	free(line);
-	return (words);
+     args = NULL;
+     while (*buffer)
+     {
+          buffer = ft_skip_chars(buffer, "\t ");
+          tmp = ft_skip_unitl_char(buffer, "\t '\"");
+          i = tmp - buffer;
+          if ((c = *tmp) == '"' || c == '\'')
+          {
+               if (!(buffer = ft_parse_quote(&args, buffer, c)))
+                    return (NULL);
+          }
+          else
+          {
+               buffer[i++] = 0;
+               ft_lstpushback(&args, buffer, i);
+               buffer += i - !c;
+          }
+     }
+     return (args);
 }

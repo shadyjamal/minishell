@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/18 17:32:21 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/18 18:57:51 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,61 +37,32 @@
 //           ft_shellmain(cmd, *env);
 // }
 
-char *ft_parse_quote(t_list **args, char *buffer, char c)
+int ft_parse_$(t_list **args, t_list *env)
 {
-     int k;
-     int j;
-     char buff[200];
-
-     k = 0;
-     j = 0;
-     while (*buffer)
-     {
-          if (k == 0 && (*buffer == '\t' || *buffer == ' '))
-               break;
-          else if (*buffer == c)
-               k = (k + 1) % 2;
-          else
-               buff[j++] = *buffer;
-          buffer++;
-     }
-     buff[j++] = 0;
-     if (!k)
-          ft_lstpushback(args, buff, j);
-     else
-     {
-          ft_putendl("unmatched c");
-          return (NULL);
-     }
-     return (buffer);
-}
-
-t_list *ft_parsecmd(char *buffer)
-{
-     char c;
+     char *dolr;
      char *tmp;
-     int i;
-     t_list *args;
+     int len_var;
+     t_list *cur_arg;
+     t_list **var_env;
 
-     args = NULL;
-     while (*buffer)
+     cur_arg = *args;
+     while (cur_arg)
      {
-          buffer = ft_skip_chars(buffer, "\t ");
-          tmp = ft_skip_unitl_char(buffer, "\t '\"");
-          i = tmp - buffer;
-          if ((c = *tmp) == '"' || c == '\'')
+          if ((dolr = ft_strchr(cur_arg->content, '$')))
           {
-               if (!(buffer = ft_parse_quote(&args, buffer, c)))
-                    return (NULL);
+               *dolr++ = 0;
+               len_var = ft_strlen(dolr);
+               if ((var_env = ft_lstfind(&env, dolr, len_var)))
+               {
+                    tmp = cur_arg->content;
+                    cur_arg->content = ft_strjoin(cur_arg->content, (*var_env)->content + len_var + 1);
+               }
+               else
+                    return (0);
           }
-          else
-          {
-               buffer[i++] = 0;
-               ft_lstpushback(&args, buffer, i);
-               buffer += i - !c;
-          }
+          cur_arg = cur_arg->next;
      }
-     return (args);
+     return (1);
 }
 
 int main(int ac, char *av[], char *environ[])
@@ -109,9 +80,11 @@ int main(int ac, char *av[], char *environ[])
           write(1, "\033[95mសួស្តី​ពិភពលោក\033[0m$>", 53);
           if (get_next_line(0, &buffer) > 0)
           {
+               printlist(env);
                args = ft_parsecmd(buffer);
                printlist(args);
-               //cmd = ft_strparse(buffer, ' ');
+               ft_parse_$(&args, env);
+               printlist(args);
                //dispatcher(cmd, &env);
           }
      }

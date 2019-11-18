@@ -6,13 +6,13 @@
 #include <sys/wait.h>
 #include "../libft/libft.h"
 
-             
-extern char **environ;
 //parse
-char    **ft_strparse(char const *s, char c);
+t_list *ft_parsecmd(char *buffer);
+
 //debug
 void    printmatrix(char **tab);
 void printlist(t_list *env);
+
 //
 void    ft_shellmain(char **cmd, t_list *env);
 t_list *env_to_list(char **env);
