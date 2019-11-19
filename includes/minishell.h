@@ -6,19 +6,12 @@
 #include <sys/wait.h>
 #include "../libft/libft.h"
 
-typedef struct	s_dictionary
-{
-	char *key;
-	char *value;
-}				t_dictionary;
-
-
 typedef struct s_env_var
 {
-	t_dictionary	home;
-	t_dictionary	pwd;
-	t_dictionary	oldpwd;
-	t_dictionary	path;
+	char	*home;
+	char	*pwd;
+	char	*oldpwd;
+	char	*path;
 }t_env_var;
 
 
