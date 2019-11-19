@@ -21,7 +21,7 @@ void parse_path(char *full_path, char *path)
 	{
 		if ((tmp = ft_strchr(path, '/')) || (tmp = ft_strchr(path, '\0')))
 		{
-			if ((diff =  (tmp - path) == 2 && ft_strnequ(*path, "..", 2)))
+			if ((diff =  (tmp - path) == 2 && ft_strnequ(path, "..", 2)))
 			{
 				if (*full_path && (tmp = ft_strrchr(full_path, '/')))
 				{

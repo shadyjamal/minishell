@@ -3,13 +3,17 @@
 t_list *tab_to_list(char **env)
 {
     int i;
+    int len;
     t_list *head;
 
     i = 0;
+    len = 0;
     head = NULL;
     while (env[i])
     {
-        ft_lstpushback(&head, env[i], ft_strlen(env[i]) + 1);
+        len = ft_strlen(env[i]);
+        ft_strreplace(env[i], '=', 0);
+        ft_lstpushback(&head, env[i], len + 1);
         i++;
     }
     return (head);

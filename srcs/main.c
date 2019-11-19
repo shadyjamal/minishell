@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 15:03:06 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/19 17:30:29 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 //
 //
 
-void dispatcher(char **cmd, t_list **env,t_env_var *env_var)
+void dispatcher(char **cmd, t_list **env)
 {
      if (!cmd[0])
           return;
-     else if (ft_strequ(cmd[0], "cd"))
-          ft_cd(cmd, env, env_var);
+     // else if (ft_strequ(cmd[0], "cd"))
+     //      ft_cd(cmd, env, env_var);
      else if (ft_strequ(cmd[0], "echo"))
           ft_echo(cmd);
      else if (ft_strequ(cmd[0], "env"))
           ft_env(env, cmd);
-     else if (ft_strequ(cmd[0], "setenv"))
-          ft_setenv(cmd, env);
+     // else if (ft_strequ(cmd[0], "setenv"))
+     //      ft_setenv(cmd, env);
      else if (ft_strequ(cmd[0], "unsetenv"))
           ft_unsetenv(cmd, env);
      // else if (ft_strequ(cmd[0], "exit"))
@@ -74,8 +74,7 @@ int main(int ac, char *av[], char *environ[])
      char **cmd;
      t_list *env;
      t_list *lstcmd;
-     t_env_var env_var;
-
+     //t_env_var env_var;
 
      (void)ac;
      (void)**av;
@@ -90,8 +89,8 @@ int main(int ac, char *av[], char *environ[])
                ft_parse_dollar(&lstcmd, env);
                //printlist(lstcmd);
                cmd = list_to_tab(lstcmd);
-               printmatrix(cmd);
-               dispatcher(cmd, &env, &env_var);
+               //printmatrix(cmd);
+               dispatcher(cmd, &env);
           }
      }
      return (0);

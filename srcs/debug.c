@@ -12,7 +12,6 @@ void printlist(t_list *env)
     while (env)
     {
         ft_putendl(env->content);
-        // printf("%s\n", env->content);
         env = env->next;
     }
 }
