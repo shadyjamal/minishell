@@ -1,5 +1,40 @@
 #include "minishell.h"
 
+t_list *tab_to_list(char **env)
+{
+    int i;
+    t_list *head;
+
+    i = 0;
+    head = NULL;
+    while (env[i])
+    {
+        ft_lstpushback(&head, env[i], ft_strlen(env[i]) + 1);
+        i++;
+    }
+    return (head);
+}
+
+char **list_to_tab(t_list *env)
+{
+    int len;
+    char **tab_env;
+    int i;
+
+    len = ft_lstsize(env);
+    tab_env = (char **)malloc(sizeof(char *) * (len + 1));
+    i = 0;
+    while (env)
+    {
+        tab_env[i] = (char *)malloc(sizeof(char) * env->content_size);
+        ft_memcpy(tab_env[i], env->content, env->content_size);
+        i++;
+        env = env->next;
+    }
+    tab_env[i] = 0;
+    return (tab_env);
+}
+
 void ft_lstonedel(t_list **to_del)
 {
     t_list *tmp;
@@ -13,29 +48,29 @@ void ft_lstonedel(t_list **to_del)
     }
 }
 
-void    ft_lstmodifone(t_list **to_mod, char *value)
+void ft_lstmodifone(t_list **to_mod, char *value)
 {
     free((*to_mod)->content);
     (*to_mod)->content = NULL;
     (*to_mod)->content = value;
-	(*to_mod)->content_size = ft_strlen(value);
+    (*to_mod)->content_size = ft_strlen(value);
 }
 
-int		ft_strisalnum(char *str)
+int ft_strisalnum(char *str)
 {
-	int i;
+    int i;
 
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
+    i = 0;
+    while (str[i])
+    {
+        if (!ft_isalnum(str[i]))
+            return (0);
+        i++;
+    }
+    return (1);
 }
 
-int     ft_lstsize(t_list *begin)
+int ft_lstsize(t_list *begin)
 {
     int i;
 
@@ -46,4 +81,24 @@ int     ft_lstsize(t_list *begin)
         begin = begin->next;
     }
     return (i);
+}
+
+t_list *ft_lstdup(t_list **env)
+{
+    t_list *cur;
+    t_list *dup;
+
+    if (!(dup = (t_list*)malloc(sizeof(t_list))))
+            return (NULL);
+    dup = NULL;
+    if (env)
+    {
+        cur = *env;
+        while (cur)
+        {
+            ft_lstpushback(&dup, cur->content, cur->content_size);
+            cur = cur->next;
+        }
+    }
+    return (dup);
 }

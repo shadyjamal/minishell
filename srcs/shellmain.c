@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/17 20:41:38 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/19 09:30:33 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void ft_shellmain(char **cmd, t_list *env)
     if (cmd_path)
     {
         // ft_putendl(cmd_path);
-        tab_env = list_to_env(env);
+        tab_env = list_to_tab(env);
         parrent = fork();
         if (parrent < 0)
             return ; // Fork error exit(Failure)

@@ -8,7 +8,7 @@ void ft_echo(char **cmd)
 	while (cmd[++i])
 	{
 		ft_putstr(cmd[i]);
-		write(1, " ", 1);
+		cmd[i] ? write(1, " ", 1) : 0;
 	}
 	write(1, "\n", 1);
 }

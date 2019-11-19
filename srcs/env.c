@@ -6,57 +6,44 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/16 16:59:31 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/19 14:26:18 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    ft_env(t_list **env)
+void    ft_display_env(t_list *env)
 {
-    t_list *cur;
-
-    cur = *env;
-    while (cur)
-    {
-        ft_putendl(cur->content);
-        cur = cur->next;
-    }
-}
-
-t_list *env_to_list(char **env)
-{
-    int i;
-    t_list *head;
-
-    i = 0;
-    head = NULL;
-    while (env[i])
-    {
-        ft_lstpushback(&head, env[i], ft_strlen(env[i]) + 1);
-        i++;
-    } 
-    return (head);
-}
-
-char **list_to_env(t_list *env)
-{
-    int len;
-    char **tab_env;
-    int i;
-
-    len = ft_lstsize(env);
-    tab_env = (char **)malloc(sizeof(char *) * (len + 1));
-    i = 0;
     while (env)
     {
-        tab_env[i] = (char*)malloc(sizeof(char) * env->content_size);
-        ft_memcpy(tab_env[i], env->content, env->content_size);
-        i++;
+        ft_putendl(env->content);
         env = env->next;
+    }   
+}
+
+void    ft_env(t_list **env, char **cmd)
+{
+    t_list *cur;
+    t_list *dup;
+    int i;
+
+    if (!cmd[1] && env)
+    {
+        ft_display_env(*env);
+        return ;
     }
-    tab_env[i] = 0;
-    return (tab_env);
+    if ((dup = ft_lstdup(env)))
+    {
+        i = 0;
+        while (cmd[++i])
+        {
+            if (ft_strchr(cmd[i], '='))
+                ft_lstpushback(&dup, cmd[i], ft_strlen(cmd[i]) + 1);
+            else
+                ft_shellmain(cmd + i, dup);
+            printlist(dup);
+        }
+    }
 }
 
 int ft_setenv(char **cmd, t_list **env)
@@ -71,7 +58,7 @@ int ft_setenv(char **cmd, t_list **env)
         return (0); //Error setenv: Too many arguments.
     if (!ft_strisalnum(cmd[1]))
         return (0); //Error setenv: Variable name must contain alphanumeric characters.
-    needle = ft_strjoin(cmd[1], "=");
+    needle = ft_strjoin(cmd[1], "="); //leak
     if ((to_modify = ft_lstfind(env, needle, ft_strlen(needle)))) 
         ft_lstmodifone(to_modify, ft_strjoin(needle, cmd[2]));
     else
