@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 12:20:09 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/19 15:03:06 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 //
 //
 
-void dispatcher(char **cmd, t_list **env)
+void dispatcher(char **cmd, t_list **env,t_env_var *env_var)
 {
      if (!cmd[0])
           return;
-     // else if (ft_strequ(cmd[0], "cd"))
-     //      ft_cd(cmd, env);
+     else if (ft_strequ(cmd[0], "cd"))
+          ft_cd(cmd, env, env_var);
      else if (ft_strequ(cmd[0], "echo"))
           ft_echo(cmd);
      else if (ft_strequ(cmd[0], "env"))
@@ -74,6 +74,8 @@ int main(int ac, char *av[], char *environ[])
      char **cmd;
      t_list *env;
      t_list *lstcmd;
+     t_env_var env_var;
+
 
      (void)ac;
      (void)**av;
@@ -89,7 +91,7 @@ int main(int ac, char *av[], char *environ[])
                //printlist(lstcmd);
                cmd = list_to_tab(lstcmd);
                printmatrix(cmd);
-               dispatcher(cmd, &env);
+               dispatcher(cmd, &env, &env_var);
           }
      }
      return (0);

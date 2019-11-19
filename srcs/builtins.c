@@ -13,31 +13,31 @@ void ft_echo(char **cmd)
 	write(1, "\n", 1);
 }
 
-// void parse_path(char *full_path, char *path)
-// {
-// 	char *tmp;
-// 	int diff;
-// 	while (*path)
-// 	{
-// 		if ((tmp = ft_strchr(path, '/')) || (tmp = ft_strchr(path, '\0')))
-// 		{
-// 			if ((diff =  (tmp - path) == 2 && ft_strnequ(*path, "..", 2)))
-// 			{
-// 				if (*full_path && (tmp = ft_strrchr(full_path, '/')))
-// 				{
-// 					*tmp = 0;
-// 					path += 3;
-// 				}
-// 			}
-// 			else
-// 			{
-// 				ft_strcat(full_path,"/");
-// 				ft_strncat(full_path, path, diff);
-// 				path += diff + 1;
-// 			}	
-// 		}
-// 	}
-// }
+void parse_path(char *full_path, char *path)
+{
+	char *tmp;
+	int diff;
+	while (*path)
+	{
+		if ((tmp = ft_strchr(path, '/')) || (tmp = ft_strchr(path, '\0')))
+		{
+			if ((diff =  (tmp - path) == 2 && ft_strnequ(*path, "..", 2)))
+			{
+				if (*full_path && (tmp = ft_strrchr(full_path, '/')))
+				{
+					*tmp = 0;
+					path += 3;
+				}
+			}
+			else
+			{
+				ft_strcat(full_path,"/");
+				ft_strncat(full_path, path, diff);
+				path += diff + 1;
+			}	
+		}
+	}
+}
 
 int cd_access(char *path)
 {

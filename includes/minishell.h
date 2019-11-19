@@ -6,6 +6,23 @@
 #include <sys/wait.h>
 #include "../libft/libft.h"
 
+typedef struct	s_dictionary
+{
+	char *key;
+	char *value;
+}				t_dictionary;
+
+
+typedef struct s_env_var
+{
+	t_dictionary	home;
+	t_dictionary	pwd;
+	t_dictionary	oldpwd;
+	t_dictionary	path;
+}t_env_var;
+
+
+
 //parse
 t_list *ft_parsecmd(char *buffer);
 
@@ -21,7 +38,7 @@ char **list_to_tab(t_list *env);
 // bultins
 void    ft_echo(char **cmd);
 void    ft_env(t_list **env, char **cmd);
-int    ft_cd(char **cmd, t_list **env);
+int    ft_cd(char **cmd, t_list **env, t_env_var *env_var);
 int ft_setenv(char **cmd, t_list **env);
 int ft_unsetenv(char **cmd, t_list **env);
 
