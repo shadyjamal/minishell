@@ -19,7 +19,7 @@ t_list *tab_to_list(char **env)
     return (head);
 }
 
-char **list_to_tab(t_list *env)
+char **list_to_tab(t_list *env, int flag)
 {
     int len;
     char **tab_env;
@@ -31,7 +31,9 @@ char **list_to_tab(t_list *env)
     while (env)
     {
         tab_env[i] = (char *)malloc(sizeof(char) * env->content_size);
+        flag ? ft_strreplace(env->content, 0, '=') : 0;
         ft_memcpy(tab_env[i], env->content, env->content_size);
+        flag ? ft_strreplace(env->content, '=', 0) : 0;
         i++;
         env = env->next;
     }

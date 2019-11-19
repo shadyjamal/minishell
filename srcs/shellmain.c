@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shellmain.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 15:01:23 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/19 19:19:29 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ char *find(char *cmd, t_list **env)
     i = 0;
     paths = NULL;
     permdeny = 0;
-    if ((getpath = ft_lstfind(env, "PATH=", 5)))
+    if ((getpath = ft_lstfind(env, "PATH", 5)))
     {
         paths = ft_strsplit((*getpath)->content + 5, ':');
         while (paths[i])
         {
-            path = ft_strjoin(paths[i], cmd); // Strjoin (paths[i] / cmd)
+            path =  ft_strnjoin((char*[]){paths[i], "/", cmd}, 3);
             if ((ret = cmd_access(path)))
             {
                 free(paths); // free(paths[i])
@@ -58,7 +58,7 @@ char *find(char *cmd, t_list **env)
     return (NULL);
 }
 
-void ft_shellmain(char **cmd, t_list *env)
+int ft_shellmain(char **cmd, t_list *env)
 {
     pid_t parrent;
     char *cmd_path;
@@ -66,22 +66,30 @@ void ft_shellmain(char **cmd, t_list *env)
     int ret;
 
     cmd_path = NULL;
-    if ((ret = cmd_access(cmd[0])) > 0) // check permission denied 
-        cmd_path = cmd[0];
-    else if (ret == -1)
-        ft_putendl("Permission denied"); // cmd[0] : Permission denied.
+    if (cmd[0] && cmd[0][0] == '/')
+    {
+        if ((ret = cmd_access(cmd[0])) > 0) // check permission denied 
+            cmd_path = cmd[0];
+        else
+        {
+            ft_putendl("ERROR");
+            return (0);
+        }
+    }
     else
         cmd_path = find(cmd[0], &env);
     if (cmd_path)
     {
-        // ft_putendl(cmd_path);
-        tab_env = list_to_tab(env);
+        tab_env = list_to_tab(env, 1);
         parrent = fork();
         if (parrent < 0)
-            return ; // Fork error exit(Failure)
+            return (0); // Fork error exit(Failure)
         if (parrent > 0)
             wait(NULL);
         if (parrent == 0)
             execve(cmd_path, cmd, tab_env);
+        return (1);
     }
+    else
+        return (0); 
 }

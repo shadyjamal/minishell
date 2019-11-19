@@ -24,9 +24,9 @@ void    printmatrix(char **tab);
 void printlist(t_list *env);
 
 //
-void    ft_shellmain(char **cmd, t_list *env);
+int    ft_shellmain(char **cmd, t_list *env);
 t_list *tab_to_list(char **env);
-char **list_to_tab(t_list *env);
+char **list_to_tab(t_list *env, int flag);
 
 // bultins
 void    ft_echo(char **cmd);

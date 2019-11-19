@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/19 17:24:51 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/19 18:05:53 by aait-ihi         ###   ########.fr       */
+/*   Created: 2019/11/19 18:08:42 by cjamal            #+#    #+#             */
+/*   Updated: 2019/11/19 18:28:43 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include "libft.h"
 
@@ -23,7 +25,7 @@ char	*ft_strnjoin(char	**strings, int n)
 	i = -1;
 	while(++i < n)
 	{
-		if(!lenghts[i])
+		if(!strings[i])
 			return(NULL);
 		lenghts[i] = ft_strlen(strings[i]);
 		size += lenghts[i];

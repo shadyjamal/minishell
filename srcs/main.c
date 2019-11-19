@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 17:30:29 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/19 18:50:17 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void dispatcher(char **cmd, t_list **env)
           ft_echo(cmd);
      else if (ft_strequ(cmd[0], "env"))
           ft_env(env, cmd);
-     // else if (ft_strequ(cmd[0], "setenv"))
-     //      ft_setenv(cmd, env);
+     else if (ft_strequ(cmd[0], "setenv"))
+          ft_setenv(cmd, env);
      else if (ft_strequ(cmd[0], "unsetenv"))
           ft_unsetenv(cmd, env);
      // else if (ft_strequ(cmd[0], "exit"))
@@ -88,7 +88,7 @@ int main(int ac, char *av[], char *environ[])
                //printlist(lstcmd);
                ft_parse_dollar(&lstcmd, env);
                //printlist(lstcmd);
-               cmd = list_to_tab(lstcmd);
+               cmd = list_to_tab(lstcmd , 0);
                //printmatrix(cmd);
                dispatcher(cmd, &env);
           }

@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 09:09:33 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 16:50:17 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/19 19:01:16 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,13 @@ int					ft_isspace(int c);
 int					ft_lissize(t_list *begin_list);
 int					ft_isblank(int c);
 int					get_next_line(const int fd, char **line);
-void				ft_lstpushback(t_list **blst, void const *content,
+t_list				*ft_lstpushback(t_list **blst, void const *content,
 		size_t content_size);
 int					ft_isinstr(char c, const char *s);
 char				*ft_skip_unitl_char(char *str, const char *compare);
 char				*ft_skip_chars(char *str, const char *compare);
-char	*ft_strreplace(char *str, char find, char replace);
+char				*ft_strreplace(char *str, char find, char replace);
+char				*ft_strnjoin(char	**strings, int n);
 
 
 #endif
