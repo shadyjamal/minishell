@@ -6,16 +6,20 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 13:33:25 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/20 19:26:42 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// recheck env   
-// $ jkbkj: Undefined variable.
-// exit
-// Bonus
+  
+void kill_procces(int signal)
+{
+	(void)signal;
+	if (child_prc_pid == 0)
+		write(1, "\n\033[95mសួស្តី​ពិភពលោក\033[0m$>", 54);
+	else
+		write(1, "\n", 1);
+}
 
 void init_var(t_list **env, t_env_var *var)
 {
@@ -28,7 +32,7 @@ void init_var(t_list **env, t_env_var *var)
 void dispatcher(char **cmd, t_list **env, t_env_var *var)
 {
 	if (!cmd[0])
-		return;
+		return ;
 	else if (ft_strequ(cmd[0], "cd"))
 		ft_cd(cmd, var);
 	else if (ft_strequ(cmd[0], "echo"))
@@ -57,6 +61,7 @@ int main(int ac, char *av[], char *environ[])
 	(void)**av;
 	env = tab_to_list(environ);
 	init_var(&env, &var);
+	signal(SIGINT, kill_procces);
 	while (1)
 	{
 		write(1, "\033[95mសួស្តី​ពិភពលោក\033[0m$>", 53);
@@ -71,6 +76,7 @@ int main(int ac, char *av[], char *environ[])
 			//printmatrix(cmd);
 			dispatcher(cmd, &env, &var);
 		}
+		child_prc_pid = 0;
 	}
 	return (0);
 }

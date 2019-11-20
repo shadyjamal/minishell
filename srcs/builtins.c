@@ -13,10 +13,10 @@ void ft_echo(char **cmd)
 	write(1, "\n", 1);
 }
 
-char *ft_get_cwd(char *ret, char *path)
+void ft_get_cwd(char *ret, char *path)
 {
 	char *tmp;
-	char *tmp2; //s[0] == tmp ;; tmp2 == tmp2  ;; s[2] == return;; النورم تنكح كل شئ
+	char *tmp2;
 	int diff;
 
 	while (*path)
@@ -38,7 +38,6 @@ char *ft_get_cwd(char *ret, char *path)
 		}
 	}
 	!*ret ? ft_strcat(ret, "/") : 0;
-	return (ret);
 }
 
 void ft_update_env(char *pwd, t_env_var *var)
@@ -66,7 +65,7 @@ void ft_cd(char **cmd, t_env_var *var)
 	if (path && !access(path + 1, F_OK))
 	{
 		*path = 0;
-		path = ft_get_cwd(path, path + 2);
+		ft_get_cwd(path, path + 2);
 		if (!chdir(path))
 			return (ft_update_env(path, var));
 		free(path);
@@ -75,6 +74,3 @@ void ft_cd(char **cmd, t_env_var *var)
 	free(path);
 	return (ft_print_error(cmd[0], ERR_NTFOUND, 0));
 }
-
-//cd
-//

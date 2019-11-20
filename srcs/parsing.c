@@ -23,7 +23,7 @@ char *ft_parse_quote(t_list **args, char *buffer, char c)
           ft_lstpushback(args, buff, j);
      else
      {
-          ft_putendl("unmatched c");
+          ft_print_error(0, ERR_UNMATCHED, c);
           return (NULL);
      }
      return (buffer);

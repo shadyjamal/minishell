@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 13:30:13 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/20 17:37:34 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,43 @@ void ft_display_env(t_list *env)
     }
 }
 
+void ft_env_args(char *cmd, t_list **dup)
+{
+    int len;
+    t_list **to_mod;
+    t_list *new;
+
+    len = ft_strlen(cmd);
+    ft_strreplace(cmd, '=', 0);
+    if ((to_mod = ft_lstfind(dup, cmd, ft_strlen(cmd) + 1)))
+    {
+        ft_strreplace(cmd, 0, '=');
+        ft_lstmodifone(*to_mod, cmd);
+        ft_strreplace((*to_mod)->content, '=', 0);
+    }
+    else if ((new = ft_lstpushback(dup, cmd, len + 1)))
+        ft_strreplace((new)->content, '=', 0);
+}
+
 void ft_env(t_list **env, char **cmd)
 {
     t_list *dup;
-    t_list *new;
     int i;
-
+    
     if (!cmd[1] && env)
-    {
-        ft_display_env(*env);
-        return ;
-    }
+        return (ft_display_env(*env));
     if ((dup = ft_lstdup(env)))
     {
         i = 0;
         while (cmd[++i])
         {
             if (ft_strchr(cmd[i], '='))
-            {
-                if ((new = ft_lstpushback(&dup, cmd[i], ft_strlen(cmd[i]) + 1)))
-                    ft_strreplace(new->content, '=', 0);
-            }
-            else
-                ft_shellmain(cmd + i, dup);
+                ft_env_args(cmd[i], &dup);
+            else if (!ft_shellmain(cmd + i, dup))
+                break;
         }
+        if(!cmd[i])
+            (ft_display_env(dup));
     }
 }
 

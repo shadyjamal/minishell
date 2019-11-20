@@ -5,19 +5,23 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <signal.h>
 #include "../libft/libft.h"
 #define C_TAB (char *[])
 #define PID "12452"
 
+ pid_t child_prc_pid;
+
 enum
 {
-	ERR_NTFOUND,
+	
+	ERR_CMDNTFD,
 	ERR_MNARGS,
 	ERR_PRMDND,
 	ERR_FWARGS,
 	ERR_FSTLTR,
 	ERR_ALFA,
-	ERR_CMDNTFD,
+	ERR_NTFOUND,
 	ERR_UKNUSR,
 	ERR_UNMATCHED
 };
