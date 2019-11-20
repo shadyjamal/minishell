@@ -1,53 +1,65 @@
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
-#include <unistd.h> 
+#include <unistd.h>
 #include <stdio.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include "../libft/libft.h"
 #define C_TAB (char *[])
-#define NO_EXEC "permission denied"
-#define FILE_NOT_FOUND "no such file or directory"
-#define MANY_ARGS "Too many arguments"
 #define PID "12452"
+
+enum
+{
+	ERR_NTFOUND,
+	ERR_MNARGS,
+	ERR_PRMDND,
+	ERR_FWARGS,
+	ERR_FSTLTR,
+	ERR_ALFA,
+	ERR_CMDNTFD,
+	ERR_UKNUSR,
+	ERR_UNMATCHED
+};
 
 typedef struct s_env_var
 {
-	t_list	*home;
-	t_list	*pwd;
-	t_list	*oldpwd;
-	t_list	*path;
-}t_env_var;
-
-
+	t_list *home;
+	t_list *pwd;
+	t_list *oldpwd;
+	t_list *path;
+} t_env_var;
 
 //parse
 t_list *ft_parsecmd(char *buffer);
+void	ft_parse_dollar(t_list **args, t_list **env);
+int ft_parse_tilde(t_list **args, t_env_var *var);
 
 //debug
-void    printmatrix(char **tab);
+void printmatrix(char **tab);
 void printlist(t_list *env);
 
 //
-int    ft_shellmain(char **cmd, t_list *env);
+int ft_shellmain(char **cmd, t_list *env);
 t_list *tab_to_list(char **env);
 char **list_to_tab(t_list *env, int flag);
 
 // bultins
-void    ft_echo(char **cmd);
-void    ft_env(t_list **env, char **cmd);
-void    ft_cd(char **cmd, t_env_var *env_var);
-int ft_setenv(char **cmd, t_list **env);
-int ft_unsetenv(char **cmd, t_list **env);
+void ft_echo(char **cmd);
+void ft_env(t_list **env, char **cmd);
+void ft_cd(char **cmd, t_env_var *env_var);
+void ft_setenv(char **cmd, t_list **env);
+void ft_unsetenv(char **cmd, t_list **env);
 
 //utils
-t_list **ft_lstfind(t_list **lst,const char *needle, size_t size);
+t_list **ft_lstfind(t_list **lst, const char *needle, size_t size);
 void ft_lstonedel(t_list **to_del);
-void    ft_lstmodifone(t_list *to_mod, char *value);
-int     ft_lstsize(t_list *begin);
-int		ft_strisalnum(char *str);
-t_list  *ft_lstdup(t_list **env);
+void ft_lstmodifone(t_list *to_mod, char *value);
+int ft_lstsize(t_list *begin);
+int ft_strisalnum(char *str);
+t_list *ft_lstdup(t_list **env);
 int ft_is_link(char *path);
+//errors
+void ft_print_error(char *str, int er, char c);
 
 #endif

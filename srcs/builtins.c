@@ -54,9 +54,9 @@ void ft_cd(char **cmd, t_env_var *var)
 	char *path;
 
 	if (cmd[1] && cmd[2])
-		return (ft_putendl(MANY_ARGS));
+		return (ft_print_error(cmd[0], ERR_MNARGS, 0));
 	else if (!cmd[1])
-		path = ft_strjoin(" ", var->home->content + 4);
+		path = ft_strjoin(" ", var->home->content + 5);
 	else if (ft_strequ(cmd[1], "-"))
 		path = ft_strjoin(" ", var->oldpwd->content + 7);
 	else if (*cmd[1] != '/')
@@ -70,8 +70,11 @@ void ft_cd(char **cmd, t_env_var *var)
 		if (!chdir(path))
 			return (ft_update_env(path, var));
 		free(path);
-		return (ft_putendl(NO_EXEC));
+		return (ft_print_error(cmd[0], ERR_PRMDND, 0));
 	}
 	free(path);
-	return (ft_putendl(FILE_NOT_FOUND));
+	return (ft_print_error(cmd[0], ERR_NTFOUND, 0));
 }
+
+//cd
+//

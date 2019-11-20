@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 19:19:29 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/20 13:05:26 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int  cmd_access(char *cmd)
         if (!access(cmd, X_OK))
             return (1);
         else
-            return (-1); //ft_putendl("permission denied");
+            return (2); //ft_putendl("permission denied");
     }
     return (0); //ft_putendl("Command not found.");
 }
@@ -42,19 +42,18 @@ char *find(char *cmd, t_list **env)
         while (paths[i])
         {
             path =  ft_strnjoin((char*[]){paths[i], "/", cmd}, 3);
-            if ((ret = cmd_access(path)))
+            if ((ret = cmd_access(path)) == 1)
             {
                 free(paths); // free(paths[i])
                 return (path);
             }
-            if (ret < 0)
-                permdeny = 1;
+            ret == 2 ? permdeny = ret : 0;
             free(path);
             i++;
         }
     }
     free(paths); //free(paths[i])
-    permdeny ? ft_putendl("permission denied") : ft_putendl("Command not found.");
+    ft_print_error(cmd, permdeny, 0);
     return (NULL);
 }
 
@@ -68,11 +67,11 @@ int ft_shellmain(char **cmd, t_list *env)
     cmd_path = NULL;
     if (cmd[0] && cmd[0][0] == '/')
     {
-        if ((ret = cmd_access(cmd[0])) > 0) // check permission denied 
+        if ((ret = cmd_access(cmd[0])) > 0) 
             cmd_path = cmd[0];
         else
         {
-            ft_putendl("ERROR");
+            ft_print_error(cmd[0], ret, 0);
             return (0);
         }
     }

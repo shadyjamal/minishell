@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 01:54:46 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/20 13:30:13 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void ft_env(t_list **env, char **cmd)
     if (!cmd[1] && env)
     {
         ft_display_env(*env);
-        return;
+        return ;
     }
     if ((dup = ft_lstdup(env)))
     {
@@ -50,36 +50,36 @@ void ft_env(t_list **env, char **cmd)
     }
 }
 
-int ft_setenv(char **cmd, t_list **env)
+void ft_setenv(char **cmd, t_list **env)
 {
-    int len;
     char *newenv;
     t_list *new;
     t_list **to_modify;
 
-    len = 0;
     newenv = NULL;
     if (cmd[3])
-        return (0); //Error setenv: Too many arguments.
+        return (ft_print_error(cmd[0], ERR_MNARGS, 0));
+    if (!cmd[1])
+        return (ft_display_env(*env));
+    if (!ft_isalpha(cmd[1][0]))
+        return (ft_print_error(cmd[0], ERR_FSTLTR, 0));
     if (!ft_strisalnum(cmd[1]))
-        return (0); //Error setenv: Variable name must contain alphanumeric characters.
-                    //leak
+        return (ft_print_error(cmd[0], ERR_ALFA, 0));
     if ((to_modify = ft_lstfind(env, cmd[1], ft_strlen(cmd[1]) + 1)))
     {
-        ft_lstmodifone(*to_modify, ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3)); // strmultijoin(cmd[1],"=",cmd[2])
+        ft_lstmodifone(*to_modify, ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3));
         ft_strreplace((*to_modify)->content, '=', 0);
     }
     else
     {
-        newenv = ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3); // multi join cmd[1], = , cmd[2]
+        newenv = ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3);
         if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
             ft_strreplace((new)->content, '=', 0);
     }
     free(newenv);
-    return (1);
 }
 
-int ft_unsetenv(char **cmd, t_list **env)
+void ft_unsetenv(char **cmd, t_list **env)
 {
     int i;
     t_list **to_del;
@@ -87,11 +87,10 @@ int ft_unsetenv(char **cmd, t_list **env)
     i = 1;
     while (cmd[i])
     {
-        if ((to_del = ft_lstfind(env, cmd[i], ft_strlen(cmd[i]))))
+        if ((to_del = ft_lstfind(env, cmd[i], ft_strlen(cmd[i]) + 1)))
             ft_lstonedel(to_del);
         i++;
     }
     if (i == 1)
-        return (0); //unsetenv: Too few arguments.
-    return (1);
+        return (ft_print_error(cmd[0], ERR_FWARGS, 0));
 }

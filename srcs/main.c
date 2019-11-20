@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 07:48:50 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/20 13:33:25 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//
-// PARSE $ ~
-//
-//
+// recheck env   
+// $ jkbkj: Undefined variable.
+// exit
+// Bonus
 
 void init_var(t_list **env, t_env_var *var)
 {
@@ -45,66 +45,6 @@ void dispatcher(char **cmd, t_list **env, t_env_var *var)
 		ft_shellmain(cmd, *env);
 }
 
-void	ft_parse_dollar(t_list **args, t_list **env)
-{
-	char *dolr;
-	char *tmp;
-	t_list **arg;
-	t_list **var_env;
-	int len_var;
-
-	arg = args;
-	while (*arg)
-	{
-		while ((dolr = ft_strchr((*arg)->content, '$')) && dolr[1])
-		{
-			*dolr++ = 0;
-			len_var = ft_skip_unitl_char(dolr, " \t$") - dolr;
-			tmp = "";
-			if (*dolr == '$' && (dolr++ || 1))
-				tmp = PID;
-			else if ((var_env = ft_lstfind(env, dolr, len_var)))
-				tmp = (*var_env)->content + len_var + 1;
-			ft_lstmodifone((*arg), ft_strnjoin(C_TAB{(*arg)->content, tmp, dolr + len_var}, 3));
-			dolr += len_var;
-		}
-		if (strlen((*arg)->content) == 0)
-				ft_lstonedel(arg);
-		else
-		arg = &(*arg)->next;
-	}
-}
-
-// int ft_parse_dollar(t_list **args, t_list *env)
-// {
-// 	char *dolr;
-// 	char *tmp;
-// 	int len_var;
-// 	t_list *cur_arg;
-// 	t_list **var_env;
-
-// 	cur_arg = *args;
-// 	while (cur_arg)
-// 	{
-// 		if ((dolr = ft_strchr(cur_arg->content, '$')) && dolr[1])
-// 		{
-// 			*dolr++ = 0;
-// 			len_var = ft_skip_unitl_char(dolr, " \t") - dolr;
-// 			if ((var_env = ft_lstfind(&env, dolr, len_var)))
-// 			{
-// 				tmp = cur_arg->content;
-// 				cur_arg->content = ft_strjoin(cur_arg->content, (*var_env)->content + len_var + 1);
-// 				cur_arg->content = ft_strjoin(cur_arg->content, dolr + len_var);
-// 				cur_arg->content_size = ft_strlen(cur_arg->content) + 1;
-// 			}
-// 			else
-// 				return (0);
-// 		}
-// 		cur_arg = cur_arg->next;
-// 	}
-// 	return (1);
-// }
-
 int main(int ac, char *av[], char *environ[])
 {
 	char *buffer;
@@ -125,6 +65,7 @@ int main(int ac, char *av[], char *environ[])
 			lstcmd = ft_parsecmd(buffer);
 			//printlist(lstcmd);
 			ft_parse_dollar(&lstcmd, &env);
+			ft_parse_tilde(&lstcmd, &var);
 			//printlist(lstcmd);
 			cmd = list_to_tab(lstcmd, 0);
 			//printmatrix(cmd);
