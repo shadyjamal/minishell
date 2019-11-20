@@ -26,16 +26,20 @@ char **list_to_tab(t_list *env, int flag)
     int i;
 
     len = ft_lstsize(env);
-    tab_env = (char **)malloc(sizeof(char *) * (len + 1));
+    tab_env = (char **)ft_memalloc(sizeof(char *) * (len + 1));
     i = 0;
     while (env)
     {
-        tab_env[i] = (char *)malloc(sizeof(char) * env->content_size);
-        flag ? ft_strreplace(env->content, 0, '=') : 0;
-        ft_memcpy(tab_env[i], env->content, env->content_size);
-        flag ? ft_strreplace(env->content, '=', 0) : 0;
-        i++;
-        env = env->next;
+        if((tab_env[i] = (char *)malloc(sizeof(char) * env->content_size)))
+        {
+            flag ? ft_strreplace(env->content, 0, '=') : 0;
+            ft_memcpy(tab_env[i],
+                      env->content,
+                      env->content_size);
+            flag ? ft_strreplace(env->content, '=', 0) : 0;
+            i++;
+            env = env->next;
+        }
     }
     tab_env[i] = 0;
     return (tab_env);
@@ -54,12 +58,11 @@ void ft_lstonedel(t_list **to_del)
     }
 }
 
-void ft_lstmodifone(t_list **to_mod, char *value)
+void ft_lstmodifone(t_list *to_mod, char *value)
 {
-    free((*to_mod)->content);
-    (*to_mod)->content = NULL;
-    (*to_mod)->content = value;
-    (*to_mod)->content_size = ft_strlen(value);
+    free(to_mod->content);
+    to_mod->content = value;
+    to_mod->content_size = ft_strlen(value);
 }
 
 int ft_strisalnum(char *str)
@@ -94,8 +97,8 @@ t_list *ft_lstdup(t_list **env)
     t_list *cur;
     t_list *dup;
 
-    if (!(dup = (t_list*)malloc(sizeof(t_list))))
-            return (NULL);
+    if (!(dup = (t_list *)malloc(sizeof(t_list))))
+        return (NULL);
     dup = NULL;
     if (env)
     {
@@ -107,4 +110,10 @@ t_list *ft_lstdup(t_list **env)
         }
     }
     return (dup);
+}
+
+int ft_is_link(char *path)
+{
+    struct stat buff;
+    return (!lstat(path, &buff) && (buff.st_mode >> 12) == 10);
 }

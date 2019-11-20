@@ -4,14 +4,20 @@
 #include <unistd.h> 
 #include <stdio.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include "../libft/libft.h"
+#define C_TAB (char *[])
+#define NO_EXEC "permission denied"
+#define FILE_NOT_FOUND "no such file or directory"
+#define MANY_ARGS "Too many arguments"
+#define PID "12452"
 
 typedef struct s_env_var
 {
-	char	*home;
-	char	*pwd;
-	char	*oldpwd;
-	char	*path;
+	t_list	*home;
+	t_list	*pwd;
+	t_list	*oldpwd;
+	t_list	*path;
 }t_env_var;
 
 
@@ -31,16 +37,17 @@ char **list_to_tab(t_list *env, int flag);
 // bultins
 void    ft_echo(char **cmd);
 void    ft_env(t_list **env, char **cmd);
-int    ft_cd(char **cmd, t_list **env, t_env_var *env_var);
+void    ft_cd(char **cmd, t_env_var *env_var);
 int ft_setenv(char **cmd, t_list **env);
 int ft_unsetenv(char **cmd, t_list **env);
 
 //utils
 t_list **ft_lstfind(t_list **lst,const char *needle, size_t size);
 void ft_lstonedel(t_list **to_del);
-void    ft_lstmodifone(t_list **to_mod, char *value);
+void    ft_lstmodifone(t_list *to_mod, char *value);
 int     ft_lstsize(t_list *begin);
 int		ft_strisalnum(char *str);
 t_list  *ft_lstdup(t_list **env);
+int ft_is_link(char *path);
 
 #endif

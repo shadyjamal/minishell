@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 19:14:42 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/20 01:54:46 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int ft_setenv(char **cmd, t_list **env)
                     //leak
     if ((to_modify = ft_lstfind(env, cmd[1], ft_strlen(cmd[1]) + 1)))
     {
-        ft_lstmodifone(to_modify, ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3)); // strmultijoin(cmd[1],"=",cmd[2])
+        ft_lstmodifone(*to_modify, ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3)); // strmultijoin(cmd[1],"=",cmd[2])
         ft_strreplace((*to_modify)->content, '=', 0);
     }
     else
