@@ -2,7 +2,7 @@
 
 void ft_print_error(char *str, int er, char c)
 {
-    if (er < 7)
+    if (er < 8)
     {
         ft_putstr(str);
         ft_putstr(": ");
@@ -16,7 +16,8 @@ void ft_print_error(char *str, int er, char c)
     er == ERR_NTFOUND ? ft_putendl("No such file or directory.") : 0;
     er == ERR_UNMATCHED ? ft_putstr("Unmatched ") : 0;
     er == ERR_UKNUSR ? ft_putstr("Unknown user: ") : 0;
-    if (er >= 7)
+    er == ERR_NOT_DIR ? ft_putendl("Not a directory") : 0;
+    if (er >= 8)
     {
         er == ERR_UNMATCHED ? ft_putchar(c) : 0;
         er == ERR_UKNUSR ? ft_putstr(str) : 0;   

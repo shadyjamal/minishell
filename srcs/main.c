@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 19:26:42 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/21 10:23:16 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void dispatcher(char **cmd, t_list **env, t_env_var *var)
 {
 	if (!cmd[0])
 		return ;
+	else if (ft_strequ(cmd[0], "exit"))
+		exit(0);
 	else if (ft_strequ(cmd[0], "cd"))
 		ft_cd(cmd, var);
 	else if (ft_strequ(cmd[0], "echo"))
@@ -64,16 +66,18 @@ int main(int ac, char *av[], char *environ[])
 	signal(SIGINT, kill_procces);
 	while (1)
 	{
-		write(1, "\033[95mសួស្តី​ពិភពលោក\033[0m$>", 53);
+		ft_putstr("-> ");
+		ft_putstr(ft_strrchr(var.pwd->content + 4,'/') + 1);
+		ft_putstr(" $>");
 		if (get_next_line(0, &buffer) > 0)
 		{
-			lstcmd = ft_parsecmd(buffer);
+			lstcmd = ft_parsecmd(buffer, &env, &var);
 			//printlist(lstcmd);
-			ft_parse_dollar(&lstcmd, &env);
-			ft_parse_tilde(&lstcmd, &var);
+			//ft_parse_dollar(&lstcmd, &env);
+			//ft_parse_tilde(&lstcmd, &var);
 			//printlist(lstcmd);
 			cmd = list_to_tab(lstcmd, 0);
-			//printmatrix(cmd);
+			// printmatrix(cmd);
 			dispatcher(cmd, &env, &var);
 		}
 		child_prc_pid = 0;

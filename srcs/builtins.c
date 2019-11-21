@@ -52,6 +52,8 @@ void ft_cd(char **cmd, t_env_var *var)
 {
 	char *path;
 
+	if(!is_dir(cmd[1]))
+		return (ft_print_error(cmd[1], ERR_NOT_DIR, 0));
 	if (cmd[1] && cmd[2])
 		return (ft_print_error(cmd[0], ERR_MNARGS, 0));
 	else if (!cmd[1])

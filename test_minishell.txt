@@ -1,0 +1,22 @@
+cd test :
+    cd to link;
+    cd with path like :
+            ////////var//////////
+    too many arguments
+echo test:
+    has $ in some of env variable
+    unmached qouts
+    linked qouts(ex:"jhjjdf"'"""""')
+commande test
+    an binary in multiple paths with and without exec permission
+    binary without permission
+    random binary
+    exit
+
+
+
+
+Important:
+
+
+

@@ -1,4 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/21 11:03:29 by aait-ihi          #+#    #+#             */
+/*   Updated: 2019/11/21 11:06:36 by aait-ihi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+_Bool		is_dir(char *file_name)
+{
+	DIR		*dirp;
+
+	if ((dirp = opendir(file_name)))
+    {
+		closedir(dirp);
+        return(1);
+    }
+    return(0);
+}
 
 t_list *tab_to_list(char **env)
 {

@@ -1,116 +1,107 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/21 06:55:35 by aait-ihi          #+#    #+#             */
+/*   Updated: 2019/11/21 10:49:49 by aait-ihi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *ft_parse_quote(t_list **args, char *buffer, char c)
+int escap(char *str, const char *from, char *to, int size)
 {
-     int k;
-     int j;
-     char buff[200];
-
-     k = 0;
-     j = 0;
-     while (*buffer)
-     {
-          if (k == 0 && (*buffer == '\t' || *buffer == ' '))
-               break;
-          else if (*buffer == c)
-               k = (k + 1) % 2;
-          else
-               buff[j++] = *buffer;
-          buffer++;
-     }
-     buff[j++] = 0;
-     if (!k)
-          ft_lstpushback(args, buff, j);
-     else
-     {
-          ft_print_error(0, ERR_UNMATCHED, c);
-          return (NULL);
-     }
-     return (buffer);
+	ft_translate(str - size, from, to);
+	return (1);
 }
 
-t_list *ft_parsecmd(char *buffer)
+char *ft_parse_arg(char *buffer, char *buff, const char *cmp)
 {
-     char c;
-     char *tmp;
-     int i;
-     t_list *args;
+	char *tmp = buffer;
 
-     args = NULL;
-     while (*buffer)
-     {
-          buffer = ft_skip_chars(buffer, "\t ");
-          tmp = ft_skip_unitl_char(buffer, "\t '\"");
-          i = tmp - buffer;
-          if ((c = *tmp) == '"' || c == '\'')
-          {
-               if (!(buffer = ft_parse_quote(&args, buffer, c)))
-                    return (NULL);
-          }
-          else
-          {
-               buffer[i++] = 0;
-               ft_lstpushback(&args, buffer, i);
-               buffer += i - !c;
-          }
-     }
-     return (args);
+	while (*buffer && !ft_isinstr(*buffer, cmp))
+		*buff++ = *buffer++;
+	*buff = 0;
+	if (*buffer == '"' && !ft_strequ(cmp, "\""))
+		return (ft_parse_arg(buffer + 1, buff, "\""));
+	if (*buffer == '"' && ft_strequ(cmp, "\"") && escap(buff, "~", "\2", buffer - tmp))
+		return (ft_parse_arg(buffer + 1, buff, " \t'\""));
+	if (*buffer == '\'' && !ft_strequ(cmp, "'"))
+		return (ft_parse_arg(buffer + 1, buff, "'"));
+	if (*buffer == '\'' && ft_strequ(cmp, "'") && escap(buff, "$~", "\1\2", buffer - tmp))
+		return (ft_parse_arg(buffer + 1, buff, " \t'\""));
+	if (*cmp == '\'' || *cmp == '"')
+	{
+		ft_print_error(0, ERR_UNMATCHED, *cmp);
+		return (NULL);
+	}
+	return (buffer);
 }
 
-void	ft_parse_dollar(t_list **args, t_list **env)
+t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var)
+{
+	char buff[1000];
+	char *tmp;
+	t_list *args;
+
+	(void)env;
+	(void)var;
+	args = NULL;
+	while (*buffer)
+	{
+		buffer = ft_skip_chars(buffer, "\t ");
+		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
+			return (NULL);
+		tmp = strdup(buff);
+		tmp = ft_parse_dollar(tmp, env);
+		tmp = ft_parse_tilde(tmp, var);
+		ft_translate(tmp, "\1\2", "$~");
+		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
+	}
+	return (args);
+}
+
+char *ft_parse_dollar(char *arg, t_list **env)
 {
 	char *dolr;
 	char *tmp;
-	t_list **arg;
+	char *to_free;
 	t_list **var_env;
 	int len_var;
 
-	arg = args;
-	while (*arg)
+	dolr = arg;
+	while (arg && (dolr = ft_strchr(dolr, '$')) && dolr[1])
 	{
-		while ((dolr = ft_strchr((*arg)->content, '$')) && dolr[1])
-		{
-			*dolr++ = 0;
-			len_var = ft_skip_unitl_char(dolr, " \t$") - dolr;
-			tmp = "";
-			if (*dolr == '$' && (dolr++ || 1))
-				tmp = PID;
-			else if ((var_env = ft_lstfind(env, dolr, len_var)))
-				tmp = (*var_env)->content + len_var + 1;
-			ft_lstmodifone((*arg), ft_strnjoin(C_TAB{(*arg)->content, tmp, dolr + len_var}, 3));
-			dolr += len_var;
-		}
-		if (strlen((*arg)->content) == 0)
-				ft_lstonedel(arg);
-		else
-		arg = &(*arg)->next;
+		*dolr++ = 0;
+		len_var = ft_skip_unitl_char(dolr, " \t$") - dolr;
+		tmp = "";
+		if (*dolr == '$' && (dolr++ || 1))
+			tmp = PID;
+		else if ((var_env = ft_lstfind(env, dolr, len_var)))
+			tmp = (*var_env)->content + len_var + 1;
+		to_free = arg;
+		arg = ft_strnjoin(C_TAB{arg, tmp, dolr + len_var}, 3);
+		free(to_free);
+		dolr += len_var;
 	}
+	if (strlen(arg) == 0)
+		return (NULL);
+	return (arg);
 }
 
-int ft_parse_tilde(t_list **args, t_env_var *var)
+char *ft_parse_tilde(char *tilde, t_env_var *var)
 {
-	char *tilde;
 	char *user;
-	t_list *arg;
 
-	arg = *args;
-	while (arg)
+	if (tilde && tilde[0] == '~')
 	{
-		tilde = arg->content;
-		if (tilde && tilde[0] == '~')
-		{
-			*tilde++ = 0;
-			if (!*tilde || *tilde == '/')
-				ft_lstmodifone(arg, ft_strjoin(var->home->content + 5, tilde));
-			else if ((user = ft_strjoin("/Users/", tilde)) && !access(user, F_OK))
-				ft_lstmodifone(arg, user);
-			else
-               {
-                    ft_print_error(tilde, ERR_UKNUSR, 0);
-				return (0);
-               }
-		}
-		arg = arg->next;
+		if (tilde[1] == '/' || tilde[1] == '\0')
+			return (ft_strjoin(var->home->content + 5, &tilde[1]));
+		else if ((user = ft_strjoin("/Users/", &tilde[1])) && !access(user, F_OK))
+			return (user);
 	}
-	return (1);
+		return (tilde);
 }

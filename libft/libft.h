@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 09:09:33 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/19 19:01:16 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/21 07:27:31 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ char				*ft_skip_unitl_char(char *str, const char *compare);
 char				*ft_skip_chars(char *str, const char *compare);
 char				*ft_strreplace(char *str, char find, char replace);
 char				*ft_strnjoin(char	**strings, int n);
+
+void				ft_translate(char *str,const char *from,const char *to);
 
 
 #endif
