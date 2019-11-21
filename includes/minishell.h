@@ -11,11 +11,11 @@
 #define C_TAB (char *[])
 #define PID "12452"
 
- pid_t child_prc_pid;
+pid_t child_prc_pid;
 
 enum
 {
-	
+
 	ERR_CMDNTFD,
 	ERR_MNARGS,
 	ERR_PRMDND,
@@ -37,9 +37,7 @@ typedef struct s_env_var
 } t_env_var;
 
 //parse
-t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var);
-char *ft_parse_dollar(char *arg, t_list **env);
-char *ft_parse_tilde(char *tilde, t_env_var *var);
+t_list *ft_parsecmd(char *buffer, t_list **env, t_env_var *var);
 
 //debug
 void printmatrix(char **tab);
@@ -54,19 +52,26 @@ char **list_to_tab(t_list *env, int flag);
 void ft_echo(char **cmd);
 void ft_env(t_list **env, char **cmd);
 void ft_cd(char **cmd, t_env_var *env_var);
-void ft_setenv(char **cmd, t_list **env);
-void ft_unsetenv(char **cmd, t_list **env);
+t_list *isenv(char *str, t_env_var *var);
+void ft_setenv(char **cmd, t_list **env, t_env_var *var);
+void ft_unsetenv(char **cmd, t_list **env, t_env_var *var);
 
 //utils
-t_list	**ft_lstfind(t_list **lst, const char *needle, size_t size);
-void	ft_lstonedel(t_list **to_del);
-void	ft_lstmodifone(t_list *to_mod, char *value);
-int		ft_lstsize(t_list *begin);
-int		ft_strisalnum(char *str);
-t_list	*ft_lstdup(t_list **env);
-int		ft_is_link(char *path);
-_Bool	is_dir(char *file_name);
+t_list **ft_lstfind(t_list **lst, const char *needle, size_t size);
+void ft_lstonedel(t_list **to_del);
+void ft_lstdelvar(t_list **to_del);
+void ft_lstmodifone(t_list *to_mod, char *value);
+int ft_strisalnum(char *str);
+t_list *ft_lstdup(t_list **env);
+int ft_is_link(char *path);
+_Bool is_dir(char *file_name);
+void ft_display_prompt(char *prt);
+
 //errors
 void ft_print_error(char *str, int er, char c);
+
+//free
+void	freecontent(void *content, size_t contentsize);
+void    freetab (char **tab);
 
 #endif

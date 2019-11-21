@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:55:35 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/21 10:49:49 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/21 19:22:24 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,6 @@ char *ft_parse_arg(char *buffer, char *buff, const char *cmp)
 		return (NULL);
 	}
 	return (buffer);
-}
-
-t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var)
-{
-	char buff[1000];
-	char *tmp;
-	t_list *args;
-
-	(void)env;
-	(void)var;
-	args = NULL;
-	while (*buffer)
-	{
-		buffer = ft_skip_chars(buffer, "\t ");
-		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
-			return (NULL);
-		tmp = strdup(buff);
-		tmp = ft_parse_dollar(tmp, env);
-		tmp = ft_parse_tilde(tmp, var);
-		ft_translate(tmp, "\1\2", "$~");
-		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
-	}
-	return (args);
 }
 
 char *ft_parse_dollar(char *arg, t_list **env)
@@ -105,3 +82,28 @@ char *ft_parse_tilde(char *tilde, t_env_var *var)
 	}
 		return (tilde);
 }
+
+t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var)
+{
+	char buff[1000];
+	char *tmp;
+	t_list *args;
+
+	(void)env;
+	(void)var;
+	args = NULL;
+	while (*buffer)
+	{
+		buffer = ft_skip_chars(buffer, "\t ");
+		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
+			return (NULL);
+		tmp = strdup(buff);
+		tmp = ft_parse_dollar(tmp, env);
+		tmp = ft_parse_tilde(tmp, var);
+		ft_translate(tmp, "\1\2", "$~");
+		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
+		free(tmp);
+	}
+	return (args);
+}
+

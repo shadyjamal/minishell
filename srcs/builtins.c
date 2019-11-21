@@ -52,14 +52,14 @@ void ft_cd(char **cmd, t_env_var *var)
 {
 	char *path;
 
-	if(!is_dir(cmd[1]))
-		return (ft_print_error(cmd[1], ERR_NOT_DIR, 0));
 	if (cmd[1] && cmd[2])
 		return (ft_print_error(cmd[0], ERR_MNARGS, 0));
 	else if (!cmd[1])
 		path = ft_strjoin(" ", var->home->content + 5);
 	else if (ft_strequ(cmd[1], "-"))
 		path = ft_strjoin(" ", var->oldpwd->content + 7);
+	else if (!is_dir(cmd[1]))
+		return (ft_print_error(cmd[1], ERR_NOT_DIR, 0));
 	else if (*cmd[1] != '/')
 		path = ft_strnjoin(C_TAB{" ", var->pwd->content + 4, "/", cmd[1]}, 4);
 	else
@@ -75,4 +75,22 @@ void ft_cd(char **cmd, t_env_var *var)
 	}
 	free(path);
 	return (ft_print_error(cmd[0], ERR_NTFOUND, 0));
+}
+
+void ft_unsetenv(char **cmd, t_list **env, t_env_var *var)
+{
+    int i;
+    t_list **del;
+
+    i = 1;
+    while (cmd[i])
+    {
+        if ((del = ft_lstfind(env, cmd[i], ft_strlen(cmd[i]) + 1)) && isenv(cmd[i], var))
+            *del = (*del)->next;
+        else if (del)
+            ft_lstonedel(del);
+        i++;
+    }
+    if (i == 1)
+        return (ft_print_error(cmd[0], ERR_FWARGS, 0));
 }

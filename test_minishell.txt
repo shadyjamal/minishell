@@ -18,5 +18,8 @@ commande test
 
 Important:
 
-
-
+cd qvasdvasvasv => no such a file ... / not a directory
+cd
+cd -
+unsetenv PWD ; cd libft => works in bash not in minishell.
+exit

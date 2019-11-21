@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/20 17:37:34 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/21 18:43:16 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void ft_env(t_list **env, char **cmd)
 {
     t_list *dup;
     int i;
-    
+
     if (!cmd[1] && env)
         return (ft_display_env(*env));
     if ((dup = ft_lstdup(env)))
@@ -55,21 +55,48 @@ void ft_env(t_list **env, char **cmd)
         {
             if (ft_strchr(cmd[i], '='))
                 ft_env_args(cmd[i], &dup);
-            else if (!ft_shellmain(cmd + i, dup))
+            else
+            {
+                ft_shellmain(cmd + i, dup);
                 break;
+            }
         }
-        if(!cmd[i])
+        if (!cmd[i])
             (ft_display_env(dup));
     }
 }
 
-void ft_setenv(char **cmd, t_list **env)
+void ft_setenvcases(char **cmd, t_list **env, t_env_var *var)
 {
     char *newenv;
     t_list *new;
     t_list **to_modify;
 
     newenv = NULL;
+    if ((newenv = ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3)))
+    {
+        if ((to_modify = ft_lstfind(env, cmd[1], ft_strlen(cmd[1]) + 1)))
+        {
+            ft_lstmodifone(*to_modify, newenv);
+            ft_strreplace((*to_modify)->content, '=', 0);
+        }
+        else if ((new = isenv(cmd[1], var)))
+        {
+            ft_lstmodifone(new, newenv);
+            ft_strreplace(new->content, '=', 0);
+            ft_lstadd(env, new);
+        }
+        else
+        {
+            if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
+                ft_strreplace((new)->content, '=', 0);
+            free(newenv);
+        }
+    }
+}
+
+void ft_setenv(char **cmd, t_list **env, t_env_var *var)
+{
     if (cmd[3])
         return (ft_print_error(cmd[0], ERR_MNARGS, 0));
     if (!cmd[1])
@@ -78,32 +105,5 @@ void ft_setenv(char **cmd, t_list **env)
         return (ft_print_error(cmd[0], ERR_FSTLTR, 0));
     if (!ft_strisalnum(cmd[1]))
         return (ft_print_error(cmd[0], ERR_ALFA, 0));
-    if ((to_modify = ft_lstfind(env, cmd[1], ft_strlen(cmd[1]) + 1)))
-    {
-        ft_lstmodifone(*to_modify, ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3));
-        ft_strreplace((*to_modify)->content, '=', 0);
-    }
-    else
-    {
-        newenv = ft_strnjoin((char *[]){cmd[1], "=", cmd[2]}, 3);
-        if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
-            ft_strreplace((new)->content, '=', 0);
-    }
-    free(newenv);
-}
-
-void ft_unsetenv(char **cmd, t_list **env)
-{
-    int i;
-    t_list **to_del;
-
-    i = 1;
-    while (cmd[i])
-    {
-        if ((to_del = ft_lstfind(env, cmd[i], ft_strlen(cmd[i]) + 1)))
-            ft_lstonedel(to_del);
-        i++;
-    }
-    if (i == 1)
-        return (ft_print_error(cmd[0], ERR_FWARGS, 0));
+    ft_setenvcases(cmd, env, var);
 }

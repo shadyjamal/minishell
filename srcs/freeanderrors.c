@@ -1,5 +1,37 @@
 #include "minishell.h"
 
+void ft_lstonedel(t_list **to_del)
+{
+    t_list *tmp;
+
+    if (to_del && *to_del)
+    {
+        tmp = *to_del;
+        *to_del = tmp->next;
+        free(tmp->content);
+        free(tmp);
+    }
+}
+
+void	freecontent(void *content, size_t contentsize)
+{
+	ft_bzero(content, contentsize);
+	free(content);
+}
+
+void    freetab (char **tab)
+{
+    int i;
+
+    i = 0;
+    while (tab[i])
+    {
+        free(tab[i]);
+        i++;
+    }
+    free(tab);
+    tab = NULL;
+}
 void ft_print_error(char *str, int er, char c)
 {
     if (er < 8)

@@ -3,20 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/21 10:23:16 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/21 19:14:49 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-  
+
 void kill_procces(int signal)
 {
 	(void)signal;
 	if (child_prc_pid == 0)
-		write(1, "\n\033[95mសួស្តី​ពិភពលោក\033[0m$>", 54);
+	{
+		// FREE listCMD
+		ft_display_prompt("process killed");
+	}
 	else
 		write(1, "\n", 1);
 }
@@ -34,7 +37,11 @@ void dispatcher(char **cmd, t_list **env, t_env_var *var)
 	if (!cmd[0])
 		return ;
 	else if (ft_strequ(cmd[0], "exit"))
-		exit(0);
+		{ 
+			freetab(cmd);
+			ft_lstdel(env, &freecontent);
+			exit(0);
+		}
 	else if (ft_strequ(cmd[0], "cd"))
 		ft_cd(cmd, var);
 	else if (ft_strequ(cmd[0], "echo"))
@@ -42,11 +49,9 @@ void dispatcher(char **cmd, t_list **env, t_env_var *var)
 	else if (ft_strequ(cmd[0], "env"))
 		ft_env(env, cmd);
 	else if (ft_strequ(cmd[0], "setenv"))
-		ft_setenv(cmd, env);
+		ft_setenv(cmd, env, var);
 	else if (ft_strequ(cmd[0], "unsetenv"))
-		ft_unsetenv(cmd, env);
-	// else if (ft_strequ(cmd[0], "exit"))
-	//     ft_exit();
+		ft_unsetenv(cmd, env, var);
 	else
 		ft_shellmain(cmd, *env);
 }
@@ -66,19 +71,16 @@ int main(int ac, char *av[], char *environ[])
 	signal(SIGINT, kill_procces);
 	while (1)
 	{
-		ft_putstr("-> ");
-		ft_putstr(ft_strrchr(var.pwd->content + 4,'/') + 1);
-		ft_putstr(" $>");
+		ft_display_prompt(var.pwd->content + 4);
 		if (get_next_line(0, &buffer) > 0)
 		{
 			lstcmd = ft_parsecmd(buffer, &env, &var);
 			//printlist(lstcmd);
-			//ft_parse_dollar(&lstcmd, &env);
-			//ft_parse_tilde(&lstcmd, &var);
-			//printlist(lstcmd);
 			cmd = list_to_tab(lstcmd, 0);
 			// printmatrix(cmd);
+			ft_lstdel(&lstcmd, &freecontent);
 			dispatcher(cmd, &env, &var);
+			//free CMD
 		}
 		child_prc_pid = 0;
 	}
