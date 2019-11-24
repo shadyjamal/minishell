@@ -46,6 +46,7 @@ void ft_update_env(char *pwd, t_env_var *var)
 	ft_lstmodifone(var->pwd, ft_strjoin("PWD=", pwd));
 	ft_strreplace(var->oldpwd->content, '=', 0);
 	ft_strreplace(var->pwd->content, '=', 0);
+	free(pwd);
 }
 
 void ft_cd(char **cmd, t_env_var *var)

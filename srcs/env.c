@@ -86,10 +86,9 @@ void ft_setenvcases(char **cmd, t_list **env, t_env_var *var)
             ft_strreplace(new->content, '=', 0);
             ft_lstadd(env, new);
         }
-        else
+        else if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
         {
-            if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
-                ft_strreplace((new)->content, '=', 0);
+            ft_strreplace((new)->content, '=', 0);
             free(newenv);
         }
     }

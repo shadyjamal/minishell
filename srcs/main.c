@@ -16,10 +16,7 @@ void kill_procces(int signal)
 {
 	(void)signal;
 	if (child_prc_pid == 0)
-	{
-		// FREE listCMD
 		ft_display_prompt("process killed");
-	}
 	else
 		write(1, "\n", 1);
 }
