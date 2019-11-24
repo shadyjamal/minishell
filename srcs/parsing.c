@@ -50,6 +50,7 @@ char *ft_parse_dollar(char *arg, t_list **env)
 	int len_var;
 
 	dolr = arg;
+	to_free = NULL;
 	while (arg && (dolr = ft_strchr(dolr, '$')) && dolr[1])
 	{
 		*dolr++ = 0;
@@ -64,7 +65,7 @@ char *ft_parse_dollar(char *arg, t_list **env)
 		free(to_free);
 		dolr += len_var;
 	}
-	if (strlen(arg) == 0)
+	if (ft_strlen(arg) == 0)
 		return (NULL);
 	return (arg);
 }
@@ -80,17 +81,18 @@ char *ft_parse_tilde(char *tilde, t_env_var *var)
 		else if ((user = ft_strjoin("/Users/", &tilde[1])) && !access(user, F_OK))
 			return (user);
 	}
-		return (tilde);
+	return (tilde);
 }
 
-t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var)
+t_list *ft_parsecmd(char *buffer, t_list **env, t_env_var *var)
 {
 	char buff[1000];
 	char *tmp;
+	char *tmp2;
 	t_list *args;
 
-	(void)env;
-	(void)var;
+	tmp = NULL;
+	tmp2 = NULL;
 	args = NULL;
 	while (*buffer)
 	{
@@ -99,11 +101,11 @@ t_list *ft_parsecmd(char *buffer, t_list **env,t_env_var *var)
 			return (NULL);
 		tmp = strdup(buff);
 		tmp = ft_parse_dollar(tmp, env);
-		tmp = ft_parse_tilde(tmp, var);
+		tmp2 = ft_parse_tilde(tmp, var);
+		tmp !=tmp2 ? free(tmp2) : 0;
 		ft_translate(tmp, "\1\2", "$~");
 		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
 		free(tmp);
 	}
 	return (args);
 }
-

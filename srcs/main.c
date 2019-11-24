@@ -80,8 +80,9 @@ int main(int ac, char *av[], char *environ[])
 			// printmatrix(cmd);
 			ft_lstdel(&lstcmd, &freecontent);
 			dispatcher(cmd, &env, &var);
-			//free CMD
 		}
+		freetab(cmd);
+		free(buffer);
 		child_prc_pid = 0;
 	}
 	return (0);

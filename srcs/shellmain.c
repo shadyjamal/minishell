@@ -24,70 +24,82 @@ int cmd_access(char *cmd)
     return (0);
 }
 
-char *find(char *cmd, t_list **env)
+char *testpaths(char *cmd, char **paths, int *permdeny)
 {
-    char *path;
     int i;
     int ret;
+    char *path;
+
+    i = 0;
+    while (paths[i])
+    {
+        if (!(path = ft_strnjoin((char *[]){paths[i], "/", cmd}, 3)))
+            return (NULL);
+        if ((ret = cmd_access(path)) == 1)
+            return (path);
+        *permdeny = ret == 2 ? ret : 0;
+        free(path);
+        i++;
+    }
+    return (NULL);
+}
+
+char *findpath(char *cmd, t_list **env)
+{
+    char *path;
     int permdeny;
     char **paths;
     t_list **getpath;
 
-    i = 0;
     paths = NULL;
+    path = NULL;
     permdeny = 0;
     if ((getpath = ft_lstfind(env, "PATH", 5)))
     {
         paths = ft_strsplit((*getpath)->content + 5, ':');
-        while (paths[i])
-        {
-            path = ft_strnjoin((char *[]){paths[i], "/", cmd}, 3);
-            if ((ret = cmd_access(path)) == 1)
-            {
-                freetab(paths);
-                return (path);
-            }
-            ret == 2 ? permdeny = ret : 0;
-            free(path);
-            i++;
-        }
+        path = testpaths(cmd, paths, &permdeny);
     }
-    freetab(paths);
-    ft_print_error(cmd, permdeny, 0);
-    return (NULL);
+    if (paths)
+        freetab(paths);
+    !path ? ft_print_error(cmd, permdeny, 0) : 0;
+    return (path);
 }
 
-int ft_shellmain(char **cmd, t_list *env)
+void execcmd(char **cmd, t_list *env, char *cmd_path)
 {
-    pid_t parrent = 0;
-    char *cmd_path;
     char **tab_env;
+    pid_t parrent;
+
+    tab_env = list_to_tab(env, 1);
+    parrent = fork();
+    child_prc_pid = parrent;
+    if (parrent < 0)
+        return ; // Fork error exit(Failure)
+    if (parrent > 0)
+        wait(NULL);
+    if (parrent == 0)
+        execve(cmd_path, cmd, tab_env);
+    freetab(tab_env);
+}
+
+void ft_shellmain(char **cmd, t_list *env)
+{
+    char *cmd_path;
     int ret;
 
     cmd_path = NULL;
     if ((ret = cmd_access(cmd[0])))
     {
-         ret == 1 ? cmd_path = cmd[0] : 0;
-         ret == 2 ? ft_print_error(cmd[0], ret, 0) : 0;
-         if (ret == 2)
-            return (0);
+        ret == 1 ? cmd_path = cmd[0] : 0;
+        ret == 2 ? ft_print_error(cmd[0], ret, 0) : 0;
+        if (ret == 2)
+            return ;
     }
     else if (!cmd_path)
-        cmd_path = find(cmd[0], &env);
+        cmd_path = findpath(cmd[0], &env);
     if (cmd_path)
     {
-        tab_env = list_to_tab(env, 1);
-        parrent = fork();
-        child_prc_pid = parrent;
-        if (parrent < 0)
-            return (0); // Fork error exit(Failure)
-        if (parrent > 0)
-            wait(NULL);
-        if (parrent == 0)
-            execve(cmd_path, cmd, tab_env);
-        // free tab
-        return (1);
+        execcmd(cmd, env, cmd_path);
+        free(cmd_path);
     }
-    else
-        return (0);
 }

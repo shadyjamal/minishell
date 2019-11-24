@@ -44,9 +44,8 @@ void printmatrix(char **tab);
 void printlist(t_list *env);
 
 //
-int ft_shellmain(char **cmd, t_list *env);
-t_list *tab_to_list(char **env);
-char **list_to_tab(t_list *env, int flag);
+void ft_shellmain(char **cmd, t_list *env);
+
 
 // bultins
 void ft_echo(char **cmd);
@@ -57,6 +56,8 @@ void ft_setenv(char **cmd, t_list **env, t_env_var *var);
 void ft_unsetenv(char **cmd, t_list **env, t_env_var *var);
 
 //utils
+t_list *tab_to_list(char **env);
+char **list_to_tab(t_list *env, int flag);
 t_list **ft_lstfind(t_list **lst, const char *needle, size_t size);
 void ft_lstonedel(t_list **to_del);
 void ft_lstdelvar(t_list **to_del);
