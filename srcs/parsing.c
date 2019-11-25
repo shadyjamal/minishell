@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:55:35 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/21 19:22:24 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/25 15:01:31 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char *ft_parse_dollar(char *arg, t_list **env)
 	int len_var;
 
 	dolr = arg;
-	to_free = NULL;
 	while (arg && (dolr = ft_strchr(dolr, '$')) && dolr[1])
 	{
 		*dolr++ = 0;
@@ -62,24 +61,29 @@ char *ft_parse_dollar(char *arg, t_list **env)
 			tmp = (*var_env)->content + len_var + 1;
 		to_free = arg;
 		arg = ft_strnjoin(C_TAB{arg, tmp, dolr + len_var}, 3);
+		dolr = arg + ft_strlen(to_free) + ft_strlen(tmp);
 		free(to_free);
-		dolr += len_var;
 	}
-	if (ft_strlen(arg) == 0)
-		return (NULL);
 	return (arg);
 }
 
 char *ft_parse_tilde(char *tilde, t_env_var *var)
 {
-	char *user;
+	char *ret;
 
 	if (tilde && tilde[0] == '~')
 	{
 		if (tilde[1] == '/' || tilde[1] == '\0')
-			return (ft_strjoin(var->home->content + 5, &tilde[1]));
-		else if ((user = ft_strjoin("/Users/", &tilde[1])) && !access(user, F_OK))
-			return (user);
+		{
+			ret = ft_strjoin(var->home->content + 5, &tilde[1]);
+			free(tilde);
+			return (ret);
+		}
+		else if ((ret = ft_strjoin("/Users/", &tilde[1])) && !access(ret, F_OK))
+		{
+			free(tilde);
+			return (ret);
+		}
 	}
 	return (tilde);
 }
@@ -88,21 +92,19 @@ t_list *ft_parsecmd(char *buffer, t_list **env, t_env_var *var)
 {
 	char buff[1000];
 	char *tmp;
-	char *tmp2;
 	t_list *args;
 
 	tmp = NULL;
-	tmp2 = NULL;
 	args = NULL;
+	buffer = ft_skip_chars(buffer, "\t ");
 	while (*buffer)
 	{
-		buffer = ft_skip_chars(buffer, "\t ");
 		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
 			return (NULL);
+		buffer = ft_skip_chars(buffer, "\t ");
 		tmp = strdup(buff);
 		tmp = ft_parse_dollar(tmp, env);
-		tmp2 = ft_parse_tilde(tmp, var);
-		tmp !=tmp2 ? free(tmp2) : 0;
+		tmp = ft_parse_tilde(tmp, var);
 		ft_translate(tmp, "\1\2", "$~");
 		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
 		free(tmp);

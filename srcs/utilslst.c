@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 11:03:29 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/21 19:20:36 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/25 12:49:25 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char **list_to_tab(t_list *env, int flag)
     i = 0;
     while (env)
     {
-        if((tab_env[i] = (char *)malloc(sizeof(char) * env->content_size)))
+        if ((tab_env[i] = (char *)malloc(sizeof(char) * env->content_size)))
         {
             flag ? ft_strreplace(env->content, 0, '=') : 0;
             ft_memcpy(tab_env[i],
@@ -92,7 +92,10 @@ char **list_to_tab(t_list *env, int flag)
 
 void ft_lstmodifone(t_list *to_mod, char *value)
 {
-    free(to_mod->content);
-    to_mod->content = value;
-    to_mod->content_size = ft_strlen(value);
+    if (value && to_mod)
+    {
+        free(to_mod->content);
+        to_mod->content = value;
+        to_mod->content_size = ft_strlen(value) + 1;
+    }
 }

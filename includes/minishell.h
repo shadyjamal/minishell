@@ -12,6 +12,7 @@
 #define PID "12452"
 
 pid_t child_prc_pid;
+t_list **pwd;
 
 enum
 {

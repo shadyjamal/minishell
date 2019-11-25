@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/14 18:16:30 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/21 19:26:23 by cjamal           ###   ########.fr       */
+/*   Created: 2019/11/25 11:54:20 by cjamal            #+#    #+#             */
+/*   Updated: 2019/11/25 12:53:34 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,22 @@ void execcmd(char **cmd, t_list *env, char *cmd_path)
 {
     char **tab_env;
     pid_t parrent;
+    int status;
 
     tab_env = list_to_tab(env, 1);
     parrent = fork();
     child_prc_pid = parrent;
     if (parrent < 0)
-        return ; // Fork error exit(Failure)
+    {
+        freetab(tab_env);
+        return ;
+    }
     if (parrent > 0)
-        wait(NULL);
+    {
+        wait(&status);
+        if (WIFSIGNALED(status))
+            ft_putstr("\n");
+    }
     if (parrent == 0)
         execve(cmd_path, cmd, tab_env);
     freetab(tab_env);
@@ -100,6 +108,7 @@ void ft_shellmain(char **cmd, t_list *env)
     if (cmd_path)
     {
         execcmd(cmd, env, cmd_path);
-        free(cmd_path);
+        if (cmd_path != cmd[0])
+            free(cmd_path);
     }
 }

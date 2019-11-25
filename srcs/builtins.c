@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/25 12:33:37 by cjamal            #+#    #+#             */
+/*   Updated: 2019/11/25 12:46:47 by cjamal           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void ft_echo(char **cmd)
@@ -46,7 +58,6 @@ void ft_update_env(char *pwd, t_env_var *var)
 	ft_lstmodifone(var->pwd, ft_strjoin("PWD=", pwd));
 	ft_strreplace(var->oldpwd->content, '=', 0);
 	ft_strreplace(var->pwd->content, '=', 0);
-	free(pwd);
 }
 
 void ft_cd(char **cmd, t_env_var *var)

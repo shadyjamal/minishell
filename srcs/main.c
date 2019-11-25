@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/21 19:14:49 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/25 13:13:55 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ void kill_procces(int signal)
 {
 	(void)signal;
 	if (child_prc_pid == 0)
-		ft_display_prompt("process killed");
-	else
-		write(1, "\n", 1);
+	{
+		ft_putchar('\n');
+		ft_display_prompt((*pwd)->content + 5);
+	}
 }
 
 void init_var(t_list **env, t_env_var *var)
@@ -27,6 +28,7 @@ void init_var(t_list **env, t_env_var *var)
 	var->pwd = *ft_lstfind(env, "PWD", 4);
 	var->oldpwd = *ft_lstfind(env, "OLDPWD", 7);
 	var->path = *ft_lstfind(env, "PATH", 5);
+	pwd = &(var->pwd);
 }
 
 void dispatcher(char **cmd, t_list **env, t_env_var *var)
