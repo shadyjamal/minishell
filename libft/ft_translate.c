@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_translate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 07:21:19 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/21 07:26:41 by aait-ihi         ###   ########.fr       */
+/*   Created: 2019/11/25 18:14:30 by cjamal            #+#    #+#             */
+/*   Updated: 2019/11/25 19:25:48 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void ft_translate(char *str,const char *from,const char *to)
+void	ft_translate(char *str, const char *from, const char *to)
 {
-    int i;
+	int i;
 
-    if(!str || !from || !to)
-        return ;
-    while(*str)
-    {
-        i = 0;
-        while(from[i])
-        {
-            if (*str == from[i])
-            {
-                *str = to[i];
-                break;
-            }
-            i++;
-        }
-        str++;
-    }
+	if (!str || !from || !to)
+		return ;
+	while (*str)
+	{
+		i = 0;
+		while (from[i])
+		{
+			if (*str == from[i])
+			{
+				*str = to[i];
+				break ;
+			}
+			i++;
+		}
+		str++;
+	}
 }

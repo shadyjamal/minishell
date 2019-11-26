@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 09:04:11 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/11 18:07:18 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/26 17:11:53 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 			tmp = (*alst)->next;
 			del((*alst)->content, (*alst)->content_size);
 			free(*alst);
+			*alst =NULL;
 			*alst = tmp;
 		}
 	}
