@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:17:00 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/26 14:02:38 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/28 11:35:49 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	ft_env(t_list **env, char **cmd)
 	}
 }
 
-void	ft_setenvcases(char **cmd, t_list **env, t_env_var *var)
+void	ft_setenvcases(char **cmd, t_list **env)
 {
 	char	*newenv;
 	t_list	*new;
@@ -82,12 +82,6 @@ void	ft_setenvcases(char **cmd, t_list **env, t_env_var *var)
 			ft_lstmodifone(*to_modify, newenv);
 			ft_strreplace((*to_modify)->content, '=', 0);
 		}
-		else if ((new = isenv(cmd[1], var)))
-		{
-			ft_lstmodifone(new, newenv);
-			ft_strreplace(new->content, '=', 0);
-			ft_lstadd(env, new);
-		}
 		else if ((new = ft_lstpushback(env, newenv, ft_strlen(newenv) + 1)))
 		{
 			ft_strreplace((new)->content, '=', 0);
@@ -96,7 +90,7 @@ void	ft_setenvcases(char **cmd, t_list **env, t_env_var *var)
 	}
 }
 
-void	ft_setenv(char **cmd, t_list **env, t_env_var *var)
+void	ft_setenv(char **cmd, t_list **env)
 {
 	if (ft_tabsize(cmd) > 3)
 		return (ft_print_error(cmd[0], ERR_MNARGS, 0));
@@ -106,5 +100,5 @@ void	ft_setenv(char **cmd, t_list **env, t_env_var *var)
 		return (ft_print_error(cmd[0], ERR_FSTLTR, 0));
 	if (!ft_strisalnum(cmd[1]))
 		return (ft_print_error(cmd[0], ERR_ALFA, 0));
-	ft_setenvcases(cmd, env, var);
+	ft_setenvcases(cmd, env);
 }

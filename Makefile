@@ -4,7 +4,15 @@ DIR_LFT = libft
 
 FLAGS = -Wall -Werror -Wextra -g
 
-SRC = $(wildcard srcs/*.c)
+SRC = srcs/builtins.c\
+	  srcs/env.c\
+	  srcs/freeanderrors.c\
+	  srcs/ft_cd.c\
+	  srcs/parsing.c\
+	  srcs/shellmain.c\
+	  srcs/utils.c\
+	  srcs/utilslst.c\
+	  srcs/main.c
 
 INC = -Iincludes/
 

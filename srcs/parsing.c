@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:55:35 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/26 14:48:16 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/29 18:22:05 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*ft_parse_dollar(char *arg, t_list **env)
 	while (arg && (dolr = ft_strchr(dolr, '$')) && dolr[1])
 	{
 		*dolr++ = 0;
-		len_var = ft_skip_unitl_char(dolr, " \t$") - dolr;
+		len_var = ft_skip_unitl_char(dolr, SYMBOL) - dolr;
 		tmp = "";
 		if (*dolr == '$' && (dolr++ || 1))
 			tmp = PID;
@@ -70,15 +70,19 @@ char	*ft_parse_dollar(char *arg, t_list **env)
 	return (arg);
 }
 
-char	*ft_parse_tilde(char *tilde, t_env_var *var)
+char	*ft_parse_tilde(char *tilde, t_list **env)
 {
 	char	*ret;
+	t_list	**var_env;
 
 	if (tilde && tilde[0] == '~')
 	{
 		if (tilde[1] == '/' || tilde[1] == '\0')
 		{
-			ret = ft_strjoin(var->home->content + 5, &tilde[1]);
+			if (!(var_env = ft_lstfind(env, "HOME", 5)))
+				ret = ft_strjoin("", &tilde[1]);
+			else
+				ret = ft_strjoin((*var_env)->content + 5, &tilde[1]);
 			free(tilde);
 			return (ret);
 		}
@@ -89,33 +93,37 @@ char	*ft_parse_tilde(char *tilde, t_env_var *var)
 				free(tilde);
 				return (ret);
 			}
-			else
-				free(ret);
+			free(ret);
 		}
 	}
 	return (tilde);
 }
 
-t_list	*ft_parsecmd(char *buffer, t_list **env, t_env_var *var)
+t_list	*ft_parsecmd(char *buffer, t_list **env)
 {
-	char	buff[1000];
+	char	*buff;
 	char	*tmp;
 	t_list	*args;
 
-	tmp = NULL;
+	if (!(buff = malloc(ft_strlen(buffer) + 1)))
+		return(NULL);
 	args = NULL;
 	buffer = ft_skip_chars(buffer, "\t ");
 	while (*buffer)
 	{
 		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
+		{
+			ft_lstdel(&args, freecontent);
 			return (NULL);
+		}
 		buffer = ft_skip_chars(buffer, "\t ");
-		tmp = strdup(buff);
+		tmp = ft_strdup(buff);
 		tmp = ft_parse_dollar(tmp, env);
-		tmp = ft_parse_tilde(tmp, var);
+		tmp = ft_parse_tilde(tmp, env);
 		ft_translate(tmp, "\1\2", "$~");
 		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);
 		free(tmp);
 	}
+	free(buff);
 	return (args);
 }

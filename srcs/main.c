@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/26 17:37:43 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/29 18:24:54 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,7 @@ void	kill_procces(int signal)
 	}
 }
 
-void	init_var(t_list **env, t_env_var *var)
-{
-	var->home = *ft_lstfind(env, "HOME", 5);
-	var->pwd = *ft_lstfind(env, "PWD", 4);
-	var->oldpwd = *ft_lstfind(env, "OLDPWD", 7);
-	var->path = *ft_lstfind(env, "PATH", 5);
-}
-
-void	dispatcher(char **cmd, t_list **env, t_env_var *var)
+void	dispatcher(char **cmd, t_list **env)
 {
 	if (!cmd[0])
 		return ;
@@ -41,28 +33,17 @@ void	dispatcher(char **cmd, t_list **env, t_env_var *var)
 		exit(0);
 	}
 	else if (ft_strequ(cmd[0], "cd"))
-		ft_cd(cmd, var);
+		ft_cd(cmd, env);
 	else if (ft_strequ(cmd[0], "echo"))
 		ft_echo(cmd);
 	else if (ft_strequ(cmd[0], "env"))
 		ft_env(env, cmd);
 	else if (ft_strequ(cmd[0], "setenv"))
-		ft_setenv(cmd, env, var);
+		ft_setenv(cmd, env);
 	else if (ft_strequ(cmd[0], "unsetenv"))
 		ft_unsetenv(cmd, env);
 	else
 		ft_shellmain(cmd, *env);
-}
-
-int		ft_tabsize(char **tab)
-{
-	int size;
-
-	size = 0;
-	if (tab)
-		while (tab[size])
-			size++;
-	return (size);
 }
 
 int		main(int ac, char *av[], char *environ[])
@@ -71,24 +52,25 @@ int		main(int ac, char *av[], char *environ[])
 	char		**cmd;
 	t_list		*env;
 	t_list		*lstcmd;
-	t_env_var	var;
 
+	(void)av;
 	(void)ac;
-	(void)**av;
+	buffer = NULL;
 	env = tab_to_list(environ);
-	init_var(&env, &var);
 	signal(SIGINT, kill_procces);
 	while (1)
 	{
 		ft_display_prompt();
 		if (get_next_line(0, &buffer) > 0)
 		{
-			lstcmd = ft_parsecmd(buffer, &env, &var);
+			lstcmd = ft_parsecmd(buffer, &env);
 			cmd = list_to_tab(lstcmd, 0);
+			ft_strdel(&buffer);
 			ft_lstdel(&lstcmd, &freecontent);
-			dispatcher(cmd, &env, &var);
+			dispatcher(cmd, &env);
+			freetab(cmd);
 		}
-		freeall(buffer, cmd);
+		ft_strdel(&buffer);
 		g_childprc_pid = 0;
 	}
 	return (0);

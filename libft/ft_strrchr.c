@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjamal <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/30 09:08:42 by cjamal            #+#    #+#             */
-/*   Updated: 2019/04/02 12:51:19 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/29 15:43:14 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ char	*ft_strrchr(const char *s, int c)
 {
 	char	*t;
 
+	if (!s)
+		return (NULL);
 	if (!c)
 		return ((char*)s + ft_strlen((char*)s));
 	t = NULL;

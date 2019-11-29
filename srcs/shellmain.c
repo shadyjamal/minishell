@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 11:54:20 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/26 14:17:49 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/29 17:47:25 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ char	*findpath(char *cmd, t_list **env)
 		paths = ft_strsplit((*getpath)->content + 5, ':');
 		path = testpaths(cmd, paths, &permdeny);
 	}
-	if (paths)
-		freetab(paths);
+	freetab(paths);
 	!path ? ft_print_error(cmd, permdeny, 0) : 0;
 	return (path);
 }
@@ -96,14 +95,14 @@ void	ft_shellmain(char **cmd, t_list *env)
 	int		ret;
 
 	cmd_path = NULL;
-	if (ft_strchr(cmd[0], '/'))
+	if (ft_strchr(cmd[0], '/') && !is_dir(cmd[0]))
 	{
 		ret = cmd_access(cmd[0]);
 		ret == 1 ? cmd_path = cmd[0] : 0;
 		if (ret != 1)
 			return (ft_print_error(cmd[0], ret, 0));
 	}
-	else
+	else if (cmd[0] && cmd[0][0])
 		cmd_path = findpath(cmd[0], &env);
 	if (cmd_path)
 	{

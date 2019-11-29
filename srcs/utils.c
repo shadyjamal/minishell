@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 12:34:15 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/26 11:18:23 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/11/29 15:43:47 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,15 @@ int		ft_is_link(char *path)
 	return (!lstat(path, &buff) && (buff.st_mode >> 12) == 10);
 }
 
-t_list	*isenv(char *str, t_env_var *var)
+int		ft_tabsize(char **tab)
 {
-	if (ft_strequ(str, "HOME"))
-		return (var->home);
-	else if (ft_strequ(str, "PWD"))
-		return (var->pwd);
-	else if (ft_strequ(str, "OLDPWD"))
-		return (var->oldpwd);
-	else if (ft_strequ(str, "PATH"))
-		return (var->path);
-	return (NULL);
+	int size;
+
+	size = 0;
+	if (tab)
+		while (tab[size])
+			size++;
+	return (size);
 }
 
 void	ft_display_prompt(void)
