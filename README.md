@@ -1,5 +1,5 @@
 # minishell
-`Minishell is the first of three 1337 School projects dedicated to the realization of a fully functional shell.`
+`Minishell is the first of three 1337 School projects dedicated to the realization of a fully functional shell in C language.`
 
 * Minishell
 * 21sh
