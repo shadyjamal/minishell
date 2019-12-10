@@ -19,4 +19,6 @@ More details in the task file [Minishell](https://github.com/shadyjamal/minishel
 
 # How to use
 
+Execute these commands:
+
 `make fclean && make && ./minishell`
