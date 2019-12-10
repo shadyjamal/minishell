@@ -15,4 +15,4 @@ In this project many features were implemented:
 
 Rewriting of the builtins echo, cd, setenv, unsetenv, env and exit.
 
-More details in the 
+More details in the task file [Minishell](https://github.com/shadyjamal/minishell/blob/master/minishell.en.pdf)
