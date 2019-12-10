@@ -16,3 +16,7 @@ In this project many features were implemented:
 Rewriting of the builtins echo, cd, setenv, unsetenv, env and exit.
 
 More details in the task file [Minishell](https://github.com/shadyjamal/minishell/blob/master/minishell.en.pdf)
+
+# How to use
+
+`make fclean && make && ./minishell`
