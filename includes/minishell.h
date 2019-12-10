@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/26 11:05:32 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/29 17:47:45 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/12/10 14:48:29 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <dirent.h>
 # include "../libft/libft.h"
 # define PID "12452"
-# define SYMBOL "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+# define SYMBOL "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ "
 
 pid_t			g_childprc_pid;
 

@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 06:55:35 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/29 18:22:05 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/12/03 12:05:23 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_list	*ft_parsecmd(char *buffer, t_list **env)
 	t_list	*args;
 
 	if (!(buff = malloc(ft_strlen(buffer) + 1)))
-		return(NULL);
+		return (NULL);
 	args = NULL;
 	buffer = ft_skip_chars(buffer, "\t ");
 	while (*buffer)
@@ -114,11 +114,11 @@ t_list	*ft_parsecmd(char *buffer, t_list **env)
 		if (!(buffer = ft_parse_arg(buffer, buff, " \t'\"")))
 		{
 			ft_lstdel(&args, freecontent);
+			free(buff);
 			return (NULL);
 		}
 		buffer = ft_skip_chars(buffer, "\t ");
-		tmp = ft_strdup(buff);
-		tmp = ft_parse_dollar(tmp, env);
+		tmp = ft_parse_dollar(ft_strdup(buff), env);
 		tmp = ft_parse_tilde(tmp, env);
 		ft_translate(tmp, "\1\2", "$~");
 		ft_lstpushback(&args, tmp, ft_strlen(tmp) + !!tmp);

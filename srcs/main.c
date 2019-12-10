@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 19:13:19 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/29 18:24:54 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/12/03 12:05:50 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ int		main(int ac, char *av[], char *environ[])
 	t_list		*env;
 	t_list		*lstcmd;
 
-	(void)av;
-	(void)ac;
+	(void)av[ac * 0];
 	buffer = NULL;
 	env = tab_to_list(environ);
 	signal(SIGINT, kill_procces);
@@ -67,7 +66,7 @@ int		main(int ac, char *av[], char *environ[])
 			cmd = list_to_tab(lstcmd, 0);
 			ft_strdel(&buffer);
 			ft_lstdel(&lstcmd, &freecontent);
-			dispatcher(cmd, &env);
+			cmd ? dispatcher(cmd, &env) : 0;
 			freetab(cmd);
 		}
 		ft_strdel(&buffer);

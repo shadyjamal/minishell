@@ -6,7 +6,7 @@
 /*   By: cjamal <cjamal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/25 11:54:20 by cjamal            #+#    #+#             */
-/*   Updated: 2019/11/29 17:47:25 by cjamal           ###   ########.fr       */
+/*   Updated: 2019/12/03 12:06:22 by cjamal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ char	*findpath(char *cmd, t_list **env)
 	paths = NULL;
 	path = NULL;
 	permdeny = 0;
-	if ((getpath = ft_lstfind(env, "PATH", 5)))
+	if (ft_strcmp(cmd, "..") &&
+		ft_strcmp(cmd, ".") && (getpath = ft_lstfind(env, "PATH", 5)))
 	{
 		paths = ft_strsplit((*getpath)->content + 5, ':');
 		path = testpaths(cmd, paths, &permdeny);

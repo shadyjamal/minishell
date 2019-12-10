@@ -2,7 +2,7 @@ NAME = minishell
 
 DIR_LFT = libft
 
-FLAGS = -Wall -Werror -Wextra -g
+FLAGS = -Wall -Werror -Wextra
 
 SRC = srcs/builtins.c\
 	  srcs/env.c\

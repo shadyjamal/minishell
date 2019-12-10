@@ -17,7 +17,7 @@ t_list	**ft_lstfind(t_list **lst, const char *needle, size_t size)
 	t_list **ptr;
 
 	ptr = lst;
-	if (!needle || !size)
+	if (!needle || !size || !lst)
 		return (NULL);
 	while (*ptr)
 	{
